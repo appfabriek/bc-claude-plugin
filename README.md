@@ -13,7 +13,7 @@ Claude Code plugin met skills voor BC AL-ontwikkeling.
 
 ```bash
 # Voeg toe als marketplace
-/plugin add-marketplace github:AppfabriekBV/bc-claude-plugin
+/plugin add-marketplace github:appfabriek/bc-claude-plugin
 
 # Installeer de skills
 /plugin install dev-publish@bc-claude-plugin
