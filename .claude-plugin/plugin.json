@@ -1,0 +1,7 @@
+{
+  "name": "bc-claude-plugin",
+  "description": "BC AL development skills for Claude Code: compile/publish via dev endpoint, remote diagnostics via GitHub Actions",
+  "author": {
+    "name": "Appfabriek"
+  }
+}
