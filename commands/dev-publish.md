@@ -30,7 +30,7 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 4. Lees `<project>/.vscode/settings.json` → `al.assemblyProbingPaths` array.
 5. Lees credentials uit memory of CLAUDE.md.
 6. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor context bij eventuele compilatiefouten.
 

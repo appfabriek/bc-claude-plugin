@@ -20,15 +20,15 @@ $ARGUMENTS — modus:
 ### Stap 0 — Laad kennis
 
 1. Lees `bc-upgrade-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-upgrade-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-upgrade-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-upgrade-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor UpgradeTag, DataTransfer, trigger volgorde.
 2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor naamgeving en ObsoleteState lifecycle.
 3. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    → DataTransfer vereist BC 20+.
 4. Lees `app.json` → huidige versie, vorige versie (als beschikbaar).
@@ -139,6 +139,6 @@ Als AppSourceCop actief is (check `AppSourceCop.json`):
 - `Modify(false)` in upgrade loops (geen triggers)
 - `Session.GetExecutionContext()` check voor externe calls
 - Lees `bc-upgrade-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-upgrade-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-upgrade-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-upgrade-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor alle patronen

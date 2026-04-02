@@ -20,11 +20,11 @@ $ARGUMENTS — modus:
 ### Stap 0 — Laad kennis
 
 1. Lees `bc-devops-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-devops-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor workflow templates, signing, environment matrix.
 2. Lees `bc-powershell.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-powershell.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-powershell.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-powershell.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor BcContainerHelper cmdlets.
 3. Lees `app.json` → `name`, `version`, `platform`, `target`.
@@ -88,6 +88,6 @@ jobs:
 - ForceSync alleen voor dev, Synchronize voor productie
 - Signing verplicht voor productie-deployments
 - Lees `bc-devops-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-devops-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor alle templates

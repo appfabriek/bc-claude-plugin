@@ -20,15 +20,15 @@ $ARGUMENTS — optionele versie-specificatie:
 ### Stap 0 — Laad kennis
 
 1. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor feature-beschikbaarheid en deprecations.
 2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor huidige best practices.
 3. Lees `bc-architecture-decisions.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-architecture-decisions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-architecture-decisions.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-architecture-decisions.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor architectuurbeslissingen.
 4. Lees `app.json` → `runtime`, `platform`, `application`.
@@ -44,7 +44,7 @@ Op basis van bron- en doelversie, identificeer:
 | <22 | ≥22 | `FindSet(true)` → `LockTable()` + `FindSet()` |
 | <22 | ≥22 | Tri-state locking beschikbaar |
 | <24 | ≥24 | Web Service Access Keys deprecated |
-| <26 | ≥26 | SOAP services deprecated |
+| <27 | ≥27 | SOAP services verwijderd (was deprecated sinds BC21) |
 | <22 | ≥22 | Namespaces beschikbaar (optioneel) |
 
 #### Nieuwe Features (aanbevolen)
@@ -57,6 +57,7 @@ Op basis van bron- en doelversie, identificeer:
 | BC 22 | API Query type | Nieuwe read-only APIs |
 | BC 24 | Copilot toolkit | AI capabilities |
 | BC 26 | Rendering layout syntax | Vervang RDLCLayout/WordLayout properties |
+| BC 27 | AL Profiler Sampling + SQL | Gebruik voor performance-analyse |
 
 ### Stap 2 — Scan project
 
@@ -66,6 +67,8 @@ grep -rn "FindSet(true)" --include="*.al" .
 grep -rn "FIND('-')" --include="*.al" .
 grep -rn "DotNet\b" --include="*.al" .
 grep -rn "RDLCLayout\|WordLayout" --include="*.al" .  # deprecated layout properties
+grep -rn "SOAP\|NavWebService\|BasicHttpBinding" --include="*.al" .
+grep -rn "SOAP\|NavWebService\|BasicHttpBinding" --include="*.xml" .
 ```
 
 Per gevonden patroon: rapporteer bestand, regelnummer, en migratie-actie.

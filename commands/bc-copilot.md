@@ -20,15 +20,15 @@ $ARGUMENTS — capability naam en optionele context:
 ### Stap 0 — Laad kennis
 
 1. Lees `bc-copilot-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-copilot-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-copilot-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-copilot-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor System.AI namespace, registratie, PromptDialog.
 2. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    → CopilotCapability vereist BC 24+, PromptDialog BC 24+.
 3. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor naamgeving.
 4. Lees `app.json` → `idRanges`, prefix, `runtime` (moet >= 13.0 zijn).
@@ -99,6 +99,6 @@ Adviseer de gebruiker:
 - ALTIJD transparantie: toon dat content AI-gegenereerd is
 - ALTIJD telemetry toevoegen voor Copilot-gebruik
 - Lees `bc-copilot-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-copilot-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-copilot-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-copilot-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor alle patronen

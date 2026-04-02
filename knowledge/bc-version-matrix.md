@@ -134,16 +134,15 @@ Feature-beschikbaarheid per BC-versie. Skills gebruiken dit om te waarschuwen al
 
 ---
 
-## BC 27/28 Preview Features (2025-2026)
+## BC 27 en BC 28
 
-Relevant voor vooruitkijken bij ISV-productontwikkeling:
-
-### BC 27 (2025 Wave 1)
-- Sampling profiler (lichtgewicht performance analyse)
-- Word layout add-in vernieuwd
+### BC 27 (2025 Wave 2) — uitgebracht
+- Sampling profiler (lichtgewicht performance analyse, met SQL tracking)
+- Word layout add-in vernieuwd (BC27+)
 - In-client debugging vanuit webclient
+- SOAP web services definitief verwijderd
 
-### BC 28 (2026 Wave 1)
+### BC 28 (2026 Wave 1) — preview
 - Semantic search op data en metadata voor AL developers
 - Fully qualified names / namespace support uitgebreid
 - Custom agents (uitbreiding BC Copilot model)

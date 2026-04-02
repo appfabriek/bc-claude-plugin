@@ -22,16 +22,16 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 ### Stap 0 — Laad kennis
 
 1. Lees `bc-test-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-test-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-test-patterns.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-test-patterns.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor test-structuur en patronen.
 2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    voor naamgeving.
 3. Lees `app.json` → `idRanges` voor test object IDs.
 4. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
     Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
    → check of test framework beschikbaar is.
 
@@ -102,23 +102,10 @@ Gebruik Library codeunits (`Library - Sales`, `Library - Purchase`, etc.) voor t
 
 ### Stap 4 — Voer tests uit
 
-**Via GitHub Actions (als `bc-diagnostic.yaml` beschikbaar):**
-
-```bash
-cat > /tmp/diag.al << 'ALEOF'
-    var
-        TestResult: Text;
-    begin
-        // Gebruik CODEUNIT.Run met test isolation
-        pCduResult.Set('result', 'Tests must be run via Test Tool or REST endpoint');
-        pCduResult.Log('Use /bc-ps run tests for container-based execution');
-    end;
-ALEOF
-```
-
-**Via REST endpoint:**
-Het standaard BC dev-endpoint ondersteunt geen directe test-executie via REST.
-Gebruik BcContainerHelper (hieronder) of GitHub Actions voor test-executie.
+**Via GitHub Actions:**
+De /bc-diagnostic workflow voert geen AL-tests uit — gebruik voor
+test-executie de BcContainerHelper optie hieronder, of de ingebouwde
+Test Tool in de BC webclient.
 
 **Via BcContainerHelper (als container beschikbaar):**
 
