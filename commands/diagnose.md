@@ -2,6 +2,7 @@
 name: diagnose
 description: Run remote AL diagnostics on a BC environment via GitHub Actions
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Remote Diagnostic
@@ -22,9 +23,18 @@ Je bent een BC AL-developer die remote diagnostics uitvoert. Volg dit proces:
 
 ### Stap 0 — Laad kennis en check recepten
 
-1. Lees **`knowledge/diagnostic-recipes.md`** uit de plugin directory (`bc-claude-plugin/knowledge/`) voor bewezen AL-snippets. Hergebruik bewezen code in plaats van opnieuw te schrijven.
-2. Lees **`knowledge/bc-tables.md`** voor tabel-referenties (veldnummers, opties, etc.)
-3. Lees **`knowledge/al-guidelines.md`** voor AL-patronen (SetLoadFields, RecordRef, etc.)
+1. Lees `diagnostic-recipes.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "diagnostic-recipes.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "diagnostic-recipes.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+    Hergebruik bewezen code in plaats van opnieuw te schrijven.
+2. Lees `bc-tables.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-tables.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-tables.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor tabel-referenties (veldnummers, opties, etc.)
+3. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor AL-patronen (SetLoadFields, RecordRef, etc.)
 4. Lees het **workflow YAML** (`bc-diagnostic.yaml`) voor de beschikbare omgevingsnamen — gebruik de exacte waarden uit de `options` lijst.
 5. Lees **CLAUDE.md** van het project voor codebase-architectuur (tabellen, codeunits, velden).
 6. Lees je **memory** voor eerder geteste snippets die niet in recipes staan.
@@ -115,7 +125,7 @@ Als de eerste diagnostic niet genoeg info geeft, schrijf een verfijndere query e
 
 Als je een diagnostic hebt geschreven die succesvol was en herbruikbaar is:
 1. Voeg het AL-snippet toe aan je **memory** als diagnostic recipe
-2. Overweeg of het ook in `knowledge/diagnostic-recipes.md` thuishoort (generiek genoeg voor alle projecten)
+2. Overweeg of het ook in `diagnostic-recipes.md` (plugin knowledge) thuishoort (generiek genoeg voor alle projecten)
 
 ## Doorlooptijd
 

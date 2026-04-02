@@ -2,6 +2,7 @@
 name: dev-publish
 description: Compile and publish AL app to BC dev server
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Dev Publish
@@ -28,7 +29,10 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
    - Lees: `server`, `serverInstance`, `tenant` (default: `default`)
 4. Lees `<project>/.vscode/settings.json` → `al.assemblyProbingPaths` array.
 5. Lees credentials uit memory of CLAUDE.md.
-6. Lees `knowledge/al-guidelines.md` voor context bij eventuele compilatiefouten.
+6. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor context bij eventuele compilatiefouten.
 
 ### Stap 1 — Zoek de AL compiler
 

@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    {
+      "name": "bc-claude-plugin",
+      "path": ".",
+      "description": "Complete BC AL development toolkit for Claude Code. 19 commands + 19-file knowledge base covering the full AL development lifecycle.",
+      "homepage": "https://github.com/appfabriek/bc-claude-plugin"
+    }
+  ]
+}

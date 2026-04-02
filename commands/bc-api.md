@@ -2,6 +2,7 @@
 name: bc-api
 description: Generate API page or API query for a BC table
 bc-version: ">=20.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC API
@@ -20,14 +21,23 @@ $ARGUMENTS — tabelnaam en optionele flags:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-api-patterns.md` voor API page/query structuur.
-2. Lees `knowledge/al-guidelines.md` voor naamgeving.
-3. Lees `knowledge/bc-version-matrix.md` → API query vereist BC 22+.
+1. Lees `bc-api-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-api-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-api-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor API page/query structuur.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgeving.
+3. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   → API query vereist BC 22+.
 4. Lees `app.json` → `idRanges`, prefix.
 
 ### Stap 1 — Analyseer de tabel
 
-Lees de tabel-definitie (AL source of `knowledge/bc-tables.md` voor standaardtabellen):
+Lees de tabel-definitie (AL source of `bc-tables.md` (uit de plugin knowledge map) voor standaardtabellen):
 - Velden: naam, type, lengte
 - FlowFields (read-only in API)
 - Primary key
@@ -124,4 +134,7 @@ query <ID> "<PREFIX> <EntityName> Query"
 - ALTIJD camelCase voor EntityName, EntitySetName, veldnamen
 - FlowFields zijn ALTIJD `Editable = false`
 - API pages zijn NIET uitbreidbaar — vermeld dit als de gebruiker een base tabel kiest
-- Lees `knowledge/bc-api-patterns.md` voor alle conventies
+- Lees `bc-api-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-api-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-api-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor alle conventies

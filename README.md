@@ -6,25 +6,55 @@ Claude Code plugin met 19 skills en een ingebouwde knowledge base voor BC AL-ont
 
 ## Installatie
 
+### Via de plugin marketplace (aanbevolen)
+
+In een Claude Code sessie:
+
+```
+/plugin marketplace add appfabriek/bc-claude-plugin
+/plugin install bc-claude-plugin@bc-claude-plugin
+```
+
+### Lokaal installeren
+
+```bash
+git clone https://github.com/appfabriek/bc-claude-plugin.git ~/code/bc-claude-plugin
+```
+
+In een Claude Code sessie:
+
+```
+/plugin install /pad/naar/bc-claude-plugin
+```
+
+### Verwijderen
+
+```
+/plugin uninstall bc-claude-plugin
+```
+
 ### Vereisten
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (CLI of VS Code extensie)
-- GitHub CLI (`gh`) — nodig voor `/diagnose` en `/bc-query`
-- VS Code met [AL Language extensie](https://marketplace.visualstudio.com/items?itemName=ms-dynamics-smb.al) — nodig voor `/dev-publish`
+- Claude Code v1.0.33 of hoger (controleer: `claude --version`)
+- GitHub CLI (`gh`) — vereist voor `/diagnose` en `/bc-query`
+- VS Code met [AL Language extensie](https://marketplace.visualstudio.com/items?itemName=ms-dynamics-smb.al) — vereist voor `/dev-publish`
 
-### Installeren
+### Setup voor /diagnose en /bc-query
 
+Deze commands vereisen een GitHub Actions workflow in je AL-project. Kopieer het workflow template uit deze plugin naar je project:
+
+```bash
+cp ~/code/bc-claude-plugin/templates/bc-diagnostic.yaml \
+   /pad/naar/jouw-al-project/.github/workflows/bc-diagnostic.yaml
 ```
-/install-plugin github:appfabriek/bc-claude-plugin
-```
 
-Dit installeert alle skills en de knowledge base in een keer. Werkt in Claude Code CLI en VS Code extensie.
+Stel de volgende GitHub Secrets in voor je repo:
+- `BC_URL_DEV`, `BC_USER_DEV`, `BC_PASS_DEV`
+- `BC_URL_TEST`, `BC_USER_TEST`, `BC_PASS_TEST`
+- `BC_URL_ACCEPT`, `BC_USER_ACCEPT`, `BC_PASS_ACCEPT`
+- `BC_URL_PRODUCTION`, `BC_USER_PRODUCTION`, `BC_PASS_PRODUCTION`
 
-### Lokaal installeren (ontwikkeling)
-
-```
-/install-plugin /pad/naar/bc-claude-plugin
-```
+Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `test`, `accept`, `production`) en de AL-omgevingen kunnen bereiken.
 
 ---
 

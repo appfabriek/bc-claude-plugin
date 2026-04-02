@@ -2,6 +2,7 @@
 name: bc-permissions
 description: Generate or audit permission sets for AL projects
 bc-version: ">=18.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Permissions
@@ -18,8 +19,14 @@ $ARGUMENTS — modus:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-permissions.md` voor syntax, entitlements, audit checklist.
-2. Lees `knowledge/al-guidelines.md` voor naamgeving.
+1. Lees `bc-permissions.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-permissions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-permissions.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor syntax, entitlements, audit checklist.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgeving.
 3. Lees `app.json` → `name`, `idRanges`, prefix.
 
 ### Modus: --generate
@@ -54,4 +61,7 @@ $ARGUMENTS — modus:
 - Prefix met app-naam
 - Base-tabel permissions: indirect (lowercase)
 - Setup-tabellen: R voor users, RIMD voor admins
-- Lees `knowledge/bc-permissions.md` voor alle details
+- Lees `bc-permissions.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-permissions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-permissions.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor alle details

@@ -2,6 +2,7 @@
 name: bc-review
 description: Review AL code against Microsoft guidelines and best practices
 bc-version: ">=14.0"
+allowed-tools: Read, Write
 ---
 
 # BC Review
@@ -21,7 +22,10 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 
 ### Stap 0 — Laad richtlijnen
 
-Lees **`knowledge/al-guidelines.md`** volledig uit de plugin directory. Dit is de reviewchecklist.
+Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+    Dit is de reviewchecklist.
 
 ### Stap 1 — Bepaal scope
 

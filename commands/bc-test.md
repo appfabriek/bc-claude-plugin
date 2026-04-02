@@ -2,6 +2,7 @@
 name: bc-test
 description: Generate and run AL test codeunits
 bc-version: ">=15.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Test
@@ -20,10 +21,19 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-test-patterns.md` voor test-structuur en patronen.
-2. Lees `knowledge/al-guidelines.md` voor naamgeving.
+1. Lees `bc-test-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-test-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-test-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor test-structuur en patronen.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgeving.
 3. Lees `app.json` → `idRanges` voor test object IDs.
-4. Lees `knowledge/bc-version-matrix.md` → check of test framework beschikbaar is.
+4. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   → check of test framework beschikbaar is.
 
 ### Stap 1 — Bepaal modus
 
@@ -106,13 +116,9 @@ cat > /tmp/diag.al << 'ALEOF'
 ALEOF
 ```
 
-**Via REST endpoint (dev server):**
-
-```bash
-curl -sk -u "<username>:<password>" \
-  "https://<hostname>:7049/<instance>/dev/test?tenant=<tenant>&testCodeunit=<ID>" \
-  -H "Accept: application/json"
-```
+**Via REST endpoint:**
+Het standaard BC dev-endpoint ondersteunt geen directe test-executie via REST.
+Gebruik BcContainerHelper (hieronder) of GitHub Actions voor test-executie.
 
 **Via BcContainerHelper (als container beschikbaar):**
 

@@ -1,0 +1,65 @@
+name: BC Diagnostic
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'BC environment name'
+        required: true
+        type: choice
+        options:
+          - dev
+          - test
+          - accept
+          - production
+      al_code:
+        description: 'AL diagnostic code (body of Execute procedure)'
+        required: true
+        type: string
+      company:
+        description: 'Company name (optional)'
+        required: false
+        type: string
+        default: ''
+      keep_installed:
+        description: 'Keep diagnostic app installed after run'
+        required: false
+        type: boolean
+        default: false
+      refresh_cache:
+        description: 'Refresh symbol cache'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  diagnostic:
+    name: Run BC Diagnostic on ${{ inputs.environment }}
+    runs-on: [self-hosted, "${{ inputs.environment }}"]
+    concurrency:
+      group: bc-diagnostic-${{ inputs.environment }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write diagnostic AL code
+        run: |
+          echo "${{ inputs.al_code }}" > /tmp/diagnostic_body.al
+
+      - name: Run diagnostic
+        env:
+          BC_URL: ${{ secrets[format('BC_URL_{0}', upper(inputs.environment))] }}
+          BC_USER: ${{ secrets[format('BC_USER_{0}', upper(inputs.environment))] }}
+          BC_PASS: ${{ secrets[format('BC_PASS_{0}', upper(inputs.environment))] }}
+          COMPANY: ${{ inputs.company }}
+        run: |
+          bash .github/scripts/run-bc-diagnostic.sh \
+            "$BC_URL" "$BC_USER" "$BC_PASS" \
+            "$COMPANY" "/tmp/diagnostic_body.al"
+
+      - name: Output result
+        run: |
+          echo "DIAGNOSTIC RESULT:"
+          cat /tmp/diagnostic_result.json 2>/dev/null || echo "No result file found"

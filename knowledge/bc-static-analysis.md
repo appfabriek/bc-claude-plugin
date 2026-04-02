@@ -37,16 +37,24 @@ Nooit AppSourceCop én PerTenantExtensionCop tegelijk — ze hebben conflicteren
 
 ---
 
-## ALCops (Community Linter)
+## LinterCop (Community Linter)
 
-LinterCop (Stefan Maron) wordt read-only in 2026. Opvolger: **ALCops** (Arthur van der Voort), v0.5.0 heeft ~95% van LinterCop regels gemigreerd.
+LinterCop is nog steeds de meest stabiele community linter. Gebruik:
+
+```
+$LinterCopUrl = "https://github.com/StefanMaron/BusinessCentral.LinterCop/releases/latest/download/BusinessCentral.LinterCop.dll"
+```
+
+ALCops (opvolger van LinterCop, Arthur van der Voort) is in ontwikkeling. Controleer de actuele release-URL op: https://github.com/StefanMaron/BusinessCentral.LinterCop
+
+Totdat ALCops volwassen is, gebruik LinterCop als primaire community linter.
 
 ### Toevoegen in AL-Go
 
 ```json
 {
     "customCodeCops": [
-        "https://github.com/ALCops/ALCops/releases/latest/download/ALCops.dll"
+        "https://github.com/StefanMaron/BusinessCentral.LinterCop/releases/latest/download/BusinessCentral.LinterCop.dll"
     ]
 }
 ```

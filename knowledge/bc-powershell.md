@@ -330,17 +330,69 @@ $authContext = New-BcAuthContext `
 | `Get-BcEnvironmentUpdateWindow` | Onderhoudstijdvak opvragen |
 | `Set-BcEnvironmentUpdateWindow` | Onderhoudstijdvak instellen |
 
-### Voorbeeld
+### Omgevingen
 
 ```powershell
 # Lijst alle omgevingen
-$envs = Get-BcEnvironments -bcAuthContext $authContext
-$envs | Format-Table name, type, applicationVersion
+$Envs = Get-BcEnvironments -bcAuthContext $authContext
+$Envs | Select-Object Name, Type, Status, Version | Format-Table
 
-# Apps op een omgeving
-$apps = Get-BcPublishedApps -bcAuthContext $authContext -environment 'production'
-$apps | Where-Object publisher -ne 'Microsoft' | Format-Table name, publisher, version
+# Productie kopiëren naar sandbox
+Copy-BcEnvironment `
+    -bcAuthContext $authContext `
+    -sourceEnvironment "Production" `
+    -destinationEnvironment "Sandbox-Copy" `
+    -copyAppData $true
+
+# Omgeving verwijderen
+Remove-BcEnvironment `
+    -bcAuthContext $authContext `
+    -environment "Sandbox-Old"
 ```
+
+### Apps via Admin Center
+
+```powershell
+# Geïnstalleerde apps opvragen
+$Apps = Get-BcPublishedApps `
+    -bcAuthContext $authContext `
+    -environment "Production"
+
+# App installeren
+Install-BcPublishedApp `
+    -bcAuthContext $authContext `
+    -environment "Sandbox" `
+    -appId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" `
+    -appVersion "1.2.0.0"
+
+# App updaten naar nieuwste versie
+Update-BcPublishedApp `
+    -bcAuthContext $authContext `
+    -environment "Production" `
+    -appId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+```
+
+### Onderhoud
+
+```powershell
+# Update window instellen
+Set-BcEnvironmentUpdateWindow `
+    -bcAuthContext $authContext `
+    -environment "Production" `
+    -startTime "01:00" `
+    -durationInHours 4
+
+# Server instance herstarten
+Restart-BcEnvironment `
+    -bcAuthContext $authContext `
+    -environment "Production"
+```
+
+### Valkuilen
+
+- `Copy-BcEnvironment` duurt 20-60 minuten — niet wachten zonder timeout
+- `Remove-BcEnvironment` is onomkeerbaar — bouw altijd een bevestigingsstap in
+- Admin Center API heeft rate limits — niet in een strakke loop aanroepen
 
 ---
 

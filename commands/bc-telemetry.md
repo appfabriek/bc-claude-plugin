@@ -2,6 +2,7 @@
 name: bc-telemetry
 description: Add telemetry, review coverage, and generate KQL queries
 bc-version: ">=18.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Telemetry
@@ -19,8 +20,14 @@ $ARGUMENTS — modus:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-telemetry-patterns.md` voor LogMessage syntax, EventId conventie, KQL templates.
-2. Lees `knowledge/al-guidelines.md` voor naamgeving.
+1. Lees `bc-telemetry-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-telemetry-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-telemetry-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor LogMessage syntax, EventId conventie, KQL templates.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgeving.
 3. Lees `app.json` → check of `applicationInsightsConnectionString` is ingesteld.
 
 ### Modus: --add [codeunit]
@@ -57,7 +64,10 @@ $ARGUMENTS — modus:
 
 ### Modus: --kql [event-type]
 
-1. Lees `knowledge/bc-telemetry-patterns.md` voor KQL templates
+1. Lees `bc-telemetry-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-telemetry-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-telemetry-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor KQL templates
 2. Genereer een kant-en-klare KQL query op basis van het gevraagde:
    - "errors" → fouten per dag timechart
    - "performance" → slowste operaties
@@ -71,4 +81,7 @@ $ARGUMENTS — modus:
 - Geen PII in `SystemMetadata` classificatie
 - Max 8 custom dimensions per LogMessage
 - `TelemetryScope::ExtensionPublisher` voor eigen App Insights
-- Lees `knowledge/bc-telemetry-patterns.md` voor alle conventies
+- Lees `bc-telemetry-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-telemetry-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-telemetry-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor alle conventies

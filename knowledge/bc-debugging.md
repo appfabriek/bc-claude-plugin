@@ -47,35 +47,55 @@
 
 ## AL Profiler
 
-### Modi
+Twee modi:
+- **Instrumentation** (standaard): exacte timing per methode, call counts. Zwaarder maar precies. Gebruik voor: isoleren van trage procedures.
+- **Sampling** (BC27+): lichtgewicht, toont ook SQL calls. Gebruik voor: eerste oriëntatie op een performance-probleem.
 
-| Modus | Wanneer | Overhead |
-|-------|---------|----------|
-| Instrumentation | Exacte timing per methode, call counts | Zwaar |
-| Sampling (BC27+) | Lichtgewicht, toont ook SQL calls | Licht |
-
-### launch.json
+### launch.json configuratie
 
 ```json
 {
+    "name": "Profile: productie",
+    "type": "al",
+    "request": "snapshotInitialize",
+    "environmentType": "Sandbox",
+    "breakOnNext": "WebClient",
     "executionContext": "Profile",
     "profilingType": "Sampling",
     "profileSamplingInterval": 100
 }
 ```
 
+`executionContext` opties:
+- `"DebugAndProfile"` — debug én profile tegelijk
+- `"Profile"` — alleen profiling, geen breakpoints
+
 ### Workflow
 
-1. Snapshot nemen met `executionContext=Profile`
-2. Ctrl+Shift+P → "AL: Generate profile file"
-3. `.alcpuprofile` opent in VS Code met top-down / bottom-up call stack
-4. CodeLens toont inline timing en hit counts in broncode
+1. Start snapshot sessie met **F7** (`executionContext` moet `"Profile"` zijn)
+2. Gebruiker voert de trage actie uit in BC
+3. **Alt+F7** — sessie stoppen, snapshot downloadt naar `.snapshots/`
+4. Ctrl+Shift+P → "AL: Generate profile file" → kies snapshot
+5. `.alcpuprofile` opent automatisch in de VS Code performance editor
 
-### Gebruik profiler voor
+### Performance Editor
 
-- Pagina's die traag openen (filter op `OnOpenPage`/`OnAfterGetRecord`)
-- Posting routines (`OnBeforePost`, `OnAfterPost` chains)
-- Onderscheid AL-tijd vs SQL-tijd (sampling modus)
+- **Top-down view:** startpunt → geneste aanroepen. Gebruik voor: "wat roept mijn trage procedure aan"
+- **Bottom-up view:** duurste procedures bovenaan. Gebruik voor: "wat kost de meeste tijd"
+- **Self time:** tijd in de procedure zelf (zonder child calls)
+- **Total time:** inclusief alle geneste aanroepen
+- **CodeLens:** na profiling toont VS Code inline timing naast procedure-headers
+
+### BC27+ Sampling met SQL tracking
+
+Bij `profilingType: "Sampling"` zie je ook welke SQL calls gemaakt zijn. Onderscheid: is de bottleneck AL-code of database queries? Kijk in de profile view naar SQL-gerelateerde frames.
+
+### Vuistregels
+
+- Trage page-opening → filter op `OnOpenPage`, `OnAfterGetRecord`
+- Trage posting → filter op `OnBeforePost`, `OnAfterPost` chains
+- Veel kleine SQL calls → N+1 probleem, gebruik `SetLoadFields` of bulk
+- Hoge total time, lage self time → probleem zit dieper in de call stack
 
 ---
 

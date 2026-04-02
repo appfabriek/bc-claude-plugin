@@ -2,6 +2,7 @@
 name: bc-new
 description: Scaffold a new AL object (table, page, codeunit, report, etc.)
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC New Object
@@ -22,8 +23,14 @@ $ARGUMENTS — object type en optionele naam, bijvoorbeeld:
 ### Stap 0 — Lees projectcontext
 
 1. Lees `app.json` → `name`, `idRanges`, `mandatoryAffixes` (indien aanwezig).
-2. Lees `knowledge/al-guidelines.md` voor naamgevingsregels.
-3. Lees `knowledge/bc-version-matrix.md` voor feature-beschikbaarheid.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgevingsregels.
+3. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor feature-beschikbaarheid.
 4. Scan bestaande AL-bestanden om het volgende te detecteren:
    - Mapstructuur (bijv. `src/Tables/`, `src/Pages/` of platte structuur)
    - Hoogst gebruikte object ID per type
@@ -198,7 +205,7 @@ Toon:
 
 ## Regels
 
-- Volg ALTIJD `knowledge/al-guidelines.md` voor naamgeving
+- Volg ALTIJD `al-guidelines.md` (plugin knowledge) voor naamgeving
 - Gebruik ALTIJD het volgende vrije ID uit `idRanges` — raad geen ID
 - Voeg ALTIJD `DataClassification` toe op tabelvelden
 - Voeg ALTIJD `Caption` toe op elk veld en object

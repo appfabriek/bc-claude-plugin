@@ -2,6 +2,7 @@
 name: bc-devops
 description: Generate or update GitHub Actions CI/CD workflow for AL projects
 bc-version: ">=18.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC DevOps
@@ -18,8 +19,14 @@ $ARGUMENTS — modus:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-devops-patterns.md` voor workflow templates, signing, environment matrix.
-2. Lees `knowledge/bc-powershell.md` voor BcContainerHelper cmdlets.
+1. Lees `bc-devops-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-devops-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor workflow templates, signing, environment matrix.
+2. Lees `bc-powershell.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-powershell.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-powershell.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor BcContainerHelper cmdlets.
 3. Lees `app.json` → `name`, `version`, `platform`, `target`.
 4. Lees `.vscode/launch.json` → server configuraties.
 
@@ -80,4 +87,7 @@ jobs:
 - Gebruik ALTIJD `--exit-status` bij `gh run watch`
 - ForceSync alleen voor dev, Synchronize voor productie
 - Signing verplicht voor productie-deployments
-- Lees `knowledge/bc-devops-patterns.md` voor alle templates
+- Lees `bc-devops-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-devops-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor alle templates

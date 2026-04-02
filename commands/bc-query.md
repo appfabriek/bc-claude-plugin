@@ -2,6 +2,7 @@
 name: bc-query
 description: Ask data questions in plain language against a BC environment
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Query
@@ -21,9 +22,18 @@ $ARGUMENTS — datavraag in gewoon Nederlands, bijvoorbeeld:
 
 ### Stap 0 — Laad kennis
 
-1. Lees **`knowledge/bc-tables.md`** uit de plugin directory voor tabelnamen, veldnummers en opties.
-2. Lees **`knowledge/diagnostic-recipes.md`** voor bewezen snippets die je kunt hergebruiken.
-3. Lees **`knowledge/al-guidelines.md`** voor AL-patronen (SetLoadFields, SetRange, etc.)
+1. Lees `bc-tables.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-tables.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-tables.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   
+2. Lees `diagnostic-recipes.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "diagnostic-recipes.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "diagnostic-recipes.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor bewezen snippets die je kunt hergebruiken.
+3. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor AL-patronen (SetLoadFields, SetRange, etc.)
 4. Lees het **workflow YAML** (`bc-diagnostic.yaml`) voor de beschikbare omgevingsnamen.
 
 ### Stap 1 — Analyseer de vraag
@@ -133,6 +143,6 @@ Als de gebruiker doorvraagt ("en op accept?", "filter op klant X"), hergebruik d
 
 - Dit is een **conversationele** interface — geen AL-kennis vereist van de gebruiker
 - Toon de AL-code NIET tenzij de gebruiker erom vraagt
-- Gebruik ALTIJD `knowledge/bc-tables.md` voor veldnummers — raad ze niet
+- Gebruik ALTIJD `bc-tables.md` (plugin knowledge) voor veldnummers — raad ze niet
 - Beperk resultaten — nooit meer dan 100 records ophalen
 - Bij twijfel over de omgeving: VRAAG, niet raden

@@ -2,6 +2,7 @@
 name: bc-env
 description: Inspect BC environment - installed apps, versions, compare environments
 bc-version: ">=14.0"
+allowed-tools: Read
 ---
 
 # BC Environment

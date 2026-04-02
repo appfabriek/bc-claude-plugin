@@ -2,6 +2,7 @@
 name: bc-product
 description: ISV product workflow - spec, roadmap, changelog
 bc-version: ">=14.0"
+allowed-tools: Read, Write
 ---
 
 # BC Product
@@ -20,8 +21,14 @@ $ARGUMENTS — modus:
 ### Stap 0 — Laad kennis
 
 1. Lees `app.json` → `name`, `version`, `description`, `publisher`.
-2. Lees `knowledge/al-guidelines.md` voor object-structuur context.
-3. Lees `knowledge/bc-appsource.md` voor submission requirements (indien ISV).
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor object-structuur context.
+3. Lees `bc-appsource.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-appsource.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-appsource.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor submission requirements (indien ISV).
 
 ### Modus: --spec
 

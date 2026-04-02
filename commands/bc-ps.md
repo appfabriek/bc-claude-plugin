@@ -2,6 +2,7 @@
 name: bc-ps
 description: Generate BcContainerHelper PowerShell scripts from task descriptions
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC PowerShell
@@ -22,8 +23,14 @@ $ARGUMENTS — taak-omschrijving in gewoon Nederlands:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-powershell.md` volledig — dit is de primaire kennisbasis.
-2. Lees `knowledge/bc-devops-patterns.md` voor CI/CD context.
+1. Lees `bc-powershell.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-powershell.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-powershell.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   volledig — dit is de primaire kennisbasis.
+2. Lees `bc-devops-patterns.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-devops-patterns.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-devops-patterns.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor CI/CD context.
 3. Als relevant: lees `app.json` en `launch.json` voor project-specifieke waarden.
 
 ### Stap 1 — Analyseer de taak
@@ -117,7 +124,7 @@ Sign-BcContainerApp `
 
 ## Regels
 
-- ALTIJD `knowledge/bc-powershell.md` raadplegen voor cmdlet details
+- ALTIJD `bc-powershell.md` (plugin knowledge) raadplegen voor cmdlet details
 - ALTIJD credentials als variabele, nooit hardcoded
 - ALTIJD `memoryLimit` instellen bij `New-BcContainer`
 - ALTIJD `timeStampServer` bij `Sign-BcContainerApp`

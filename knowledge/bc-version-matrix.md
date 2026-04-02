@@ -14,6 +14,7 @@ Feature-beschikbaarheid per BC-versie. Skills gebruiken dit om te waarschuwen al
 | BC 24 | 2024 Wave 1 | 13.0 | 24.x |
 | BC 25 | 2024 Wave 2 | 14.0 | 25.x |
 | BC 26 | 2025 Wave 1 | 15.0 | 26.x |
+| BC 27 | 2025 Wave 2 | 16.0 | 27.x |
 
 ---
 
@@ -84,13 +85,15 @@ Feature-beschikbaarheid per BC-versie. Skills gebruiken dit om te waarschuwen al
 | NCCI (ColumnStoreIndex) | BC 22 | 11.0 |
 | Partial records on API pages | BC 22 | 11.0 |
 | Calculate only visible FlowFields | BC 26 | 15.0 |
+| AL Profiler Sampling met SQL tracking | BC 27 | 16.0 |
+| In-client debugging vanuit webclient | BC 27 | 16.0 |
 
 ### Deprecated / Removed
 
 | Feature | Deprecated | Removed |
 |---------|-----------|---------|
 | `FindSet(true/true)` | BC 22 | — |
-| SOAP web services | BC 26 | — |
+| SOAP web services | BC 21 | BC 27 |
 | Web Service Access Keys | BC 24 | BC 26 |
 | `Report.SaveAsExcel` (client) | BC 21 | — |
 | Control Add-ins (partial) | BC 22 | — |

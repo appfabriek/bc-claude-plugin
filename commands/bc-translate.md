@@ -2,6 +2,7 @@
 name: bc-translate
 description: Sync translations across all XLF language files
 bc-version: ">=14.0"
+allowed-tools: Read, Write
 ---
 
 # BC Translate
@@ -20,7 +21,10 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 
 ### Stap 0 — Lees projectcontext
 
-1. Lees `knowledge/al-guidelines.md` uit de plugin directory voor XLF-formaat details.
+1. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   
 2. Zoek het AL-project: de map met `app.json`.
 3. Lees `app.json` → `name` (gebruikt in XLF-bestandsnamen).
 4. Controleer of `"features": ["TranslationFile"]` aan staat in `app.json`. Zo niet → meld dit en stop.

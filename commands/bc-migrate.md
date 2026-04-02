@@ -2,6 +2,7 @@
 name: bc-migrate
 description: Assist with BC version migration (e.g. BC14→BC27)
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Migrate
@@ -18,9 +19,18 @@ $ARGUMENTS — optionele versie-specificatie:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-version-matrix.md` voor feature-beschikbaarheid en deprecations.
-2. Lees `knowledge/al-guidelines.md` voor huidige best practices.
-3. Lees `knowledge/bc-architecture-decisions.md` voor architectuurbeslissingen.
+1. Lees `bc-version-matrix.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-version-matrix.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-version-matrix.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor feature-beschikbaarheid en deprecations.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor huidige best practices.
+3. Lees `bc-architecture-decisions.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-architecture-decisions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-architecture-decisions.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor architectuurbeslissingen.
 4. Lees `app.json` → `runtime`, `platform`, `application`.
 
 ### Stap 1 — Bepaal migratiepaden
@@ -95,5 +105,5 @@ Stel de juiste versie-waarden voor:
 
 - Scan ALTIJD het hele project, niet alleen gewijzigde bestanden
 - Prioriteer: eerst verplichte wijzigingen, dan aanbevolen, dan optioneel
-- Gebruik `knowledge/bc-version-matrix.md` als autoritieve bron
+- Gebruik `bc-version-matrix.md` (plugin knowledge) als autoritieve bron
 - Bied aan om gevonden issues automatisch te fixen (als eenvoudig)

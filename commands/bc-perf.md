@@ -2,6 +2,7 @@
 name: bc-perf
 description: Scan AL code for performance anti-patterns or profile queries
 bc-version: ">=17.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Performance
@@ -19,9 +20,18 @@ $ARGUMENTS — modus:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/al-guidelines.md` sectie Performance.
-2. Lees `knowledge/bc-architecture-decisions.md` sectie Performance Architectuur.
-3. Lees `knowledge/diagnostic-recipes.md` voor profiling-recepten.
+1. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   sectie Performance.
+2. Lees `bc-architecture-decisions.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-architecture-decisions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-architecture-decisions.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   sectie Performance Architectuur.
+3. Lees `diagnostic-recipes.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "diagnostic-recipes.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "diagnostic-recipes.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor profiling-recepten.
 
 ### Modus: --scan
 

@@ -2,6 +2,7 @@
 name: bc-events
 description: List, subscribe to, or publish BC events
 bc-version: ">=14.0"
+allowed-tools: Bash, Read, Write, Glob
 ---
 
 # BC Events
@@ -19,9 +20,18 @@ $ARGUMENTS — modus:
 
 ### Stap 0 — Laad kennis
 
-1. Lees `knowledge/bc-events.md` voor event catalogus en subscriber patterns.
-2. Lees `knowledge/al-guidelines.md` voor naamgeving.
-3. Lees `knowledge/bc-architecture-decisions.md` sectie Event Architectuur.
+1. Lees `bc-events.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-events.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-events.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor event catalogus en subscriber patterns.
+2. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "al-guidelines.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor naamgeving.
+3. Lees `bc-architecture-decisions.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-architecture-decisions.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-architecture-decisions.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   sectie Event Architectuur.
 
 ### Modus: --list [domein]
 
@@ -74,4 +84,7 @@ end;
 - Subscriber codeunit: één per feature-area
 - Nooit `Commit` in subscribers
 - `false, false` voor binding parameters (standaard)
-- Lees `knowledge/bc-events.md` voor alle event signatures
+- Lees `bc-events.md` uit de knowledge/ map van de bc-claude-plugin.
+    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin -name "bc-events.md" 2>/dev/null || find ~/code/bc-claude-plugin/knowledge -name "bc-events.md" 2>/dev/null | head -1`
+    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
+   voor alle event signatures
