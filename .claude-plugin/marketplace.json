@@ -12,7 +12,7 @@
       "name": "bc-claude-plugin",
       "source": "./",
       "description": "Complete BC AL development toolkit: 19 commands with 19-file knowledge base covering the full AL development lifecycle.",
-      "version": "0.3.0",
+      "version": "1.0.0",
       "homepage": "https://github.com/appfabriek/bc-claude-plugin",
       "repository": "https://github.com/appfabriek/bc-claude-plugin"
     }

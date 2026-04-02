@@ -1,6 +1,6 @@
 {
   "name": "bc-claude-plugin",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Complete BC AL development toolkit: 19 commands with 19-file knowledge base covering AL guidelines, BC tables, events, API patterns, AppSource compliance, and architecture decisions.",
   "author": {
     "name": "Appfabriek"
