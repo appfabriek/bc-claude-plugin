@@ -1,10 +1,20 @@
 {
+  "name": "bc-claude-plugin",
+  "owner": {
+    "name": "Appfabriek",
+    "url": "https://github.com/appfabriek"
+  },
+  "metadata": {
+    "description": "Business Central AL development toolkit for Claude Code"
+  },
   "plugins": [
     {
       "name": "bc-claude-plugin",
-      "path": ".",
-      "description": "Complete BC AL development toolkit for Claude Code. 19 commands + 19-file knowledge base covering the full AL development lifecycle.",
-      "homepage": "https://github.com/appfabriek/bc-claude-plugin"
+      "source": "./",
+      "description": "Complete BC AL development toolkit: 19 commands with 19-file knowledge base covering the full AL development lifecycle.",
+      "version": "0.3.0",
+      "homepage": "https://github.com/appfabriek/bc-claude-plugin",
+      "repository": "https://github.com/appfabriek/bc-claude-plugin"
     }
   ]
 }
