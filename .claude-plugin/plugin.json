@@ -1,6 +1,6 @@
 {
   "name": "bc-claude-plugin",
-  "description": "BC AL development skills for Claude Code: compile/publish via dev endpoint, remote diagnostics via GitHub Actions",
+  "description": "BC AL development toolkit for Claude Code: compile/publish, remote diagnostics, code review, translations, data queries, and environment inspection — with built-in Microsoft AL guidelines and BC knowledge base",
   "author": {
     "name": "Appfabriek"
   }

@@ -14,16 +14,19 @@ $ARGUMENTS — beschrijving van wat je wilt diagnosticeren. Voorbeelden:
 
 Je bent een BC AL-developer die remote diagnostics uitvoert. Volg dit proces:
 
-### Stap 0 — Check bestaande recepten en projectcontext
+### Stap 0 — Laad kennis en check recepten
 
-1. Lees je **memory** voor geteste AL-snippets (diagnostic recipes). Hergebruik bewezen code in plaats van opnieuw te schrijven.
-2. Lees het **workflow YAML** (`bc-diagnostic.yaml`) voor de beschikbare omgevingsnamen — gebruik de exacte waarden uit de `options` lijst.
-3. Lees **CLAUDE.md** voor de codebase-architectuur (tabellen, codeunits, velden).
+1. Lees **`knowledge/diagnostic-recipes.md`** uit de plugin directory (`bc-claude-plugin/knowledge/`) voor bewezen AL-snippets. Hergebruik bewezen code in plaats van opnieuw te schrijven.
+2. Lees **`knowledge/bc-tables.md`** voor tabel-referenties (veldnummers, opties, etc.)
+3. Lees **`knowledge/al-guidelines.md`** voor AL-patronen (SetLoadFields, RecordRef, etc.)
+4. Lees het **workflow YAML** (`bc-diagnostic.yaml`) voor de beschikbare omgevingsnamen — gebruik de exacte waarden uit de `options` lijst.
+5. Lees **CLAUDE.md** van het project voor codebase-architectuur (tabellen, codeunits, velden).
+6. Lees je **memory** voor eerder geteste snippets die niet in recipes staan.
 
 ### Stap 1 — Analyseer de vraag
 
 Bepaal uit de beschrijving:
-- **Omgeving**: welke BC instance (haal de lijst op uit de workflow)
+- **Omgeving**: welke BC instance (haal de lijst op uit de workflow). Als er maar één omgeving is, gebruik die automatisch.
 - **Wat te doen**: welke tabellen/codeunits/functies relevant zijn
 - **Company**: indien relevant (standaard leeg)
 
@@ -39,17 +42,19 @@ pCduResult.Set('key', 'textvalue');        // Text
 pCduResult.SetInteger('key', 42);          // Integer
 pCduResult.SetDecimal('key', 3.14);        // Decimal
 pCduResult.SetBoolean('key', true);        // Boolean
-pCduResult.SetObject('key', lJsonObj);     // JSON object
-pCduResult.SetArray('key', lJsonArr);      // JSON array
-pCduResult.AddRecord('key', lRecRef);      // Record als JSON (alle velden)
+pCduResult.SetObject('key', ResultObject);  // JSON object
+pCduResult.SetArray('key', ResultArray);   // JSON array
+pCduResult.AddRecord('key', SourceRecord); // Record als JSON (alle velden)
 pCduResult.Log('debug message');           // Append to _log
 pCduResult.SetError('foutmelding');        // Markeer als ERROR
 ```
 
 **Belangrijke AL-regels:**
-- Gebruik `RecordRef` + `FieldRef` voor virtuele/systeem-tabellen
+- Gebruik `RecordRef` + `FieldRef` voor virtuele/systeem-tabellen (tabel > 2000000000)
 - `RecordRef.SetFilter()` bestaat NIET — gebruik `FieldRef := RecordRef.Field(n); FieldRef.SetFilter(...)`
 - Errors worden automatisch opgevangen via TryFunction — je hoeft geen error handling te schrijven
+- Gebruik `SetLoadFields` als je niet alle velden nodig hebt
+- Beperk resultaten met een counter (max ~100 records) om timeouts te voorkomen
 
 ### Stap 3 — Schrijf naar temp bestand en trigger
 
@@ -76,12 +81,20 @@ Optionele flags:
 
 ### Stap 4 — Wacht op resultaat
 
+Haal automatisch de run-ID op en wacht:
+
 ```bash
-# Wacht tot de run klaar is
-gh run watch <run-id> --exit-status
+# Wacht even tot de run geregistreerd is
+sleep 3
+
+# Haal de laatste run-ID op
+RUN_ID=$(gh run list --workflow=bc-diagnostic.yaml --limit=1 --json databaseId -q '.[0].databaseId')
+
+# Wacht tot klaar
+gh run watch "$RUN_ID" --exit-status
 
 # Lees het resultaat
-gh run view <run-id> --log 2>&1 | grep -A 30 "DIAGNOSTIC RESULT"
+gh run view "$RUN_ID" --log 2>&1 | grep -A 30 "DIAGNOSTIC RESULT"
 ```
 
 ### Stap 5 — Analyseer en rapporteer
@@ -94,7 +107,9 @@ Als de eerste diagnostic niet genoeg info geeft, schrijf een verfijndere query e
 
 ### Stap 7 — Bewaar nieuwe recepten
 
-Als je een diagnostic hebt geschreven die succesvol was en herbruikbaar is voor toekomstige vragen, voeg het AL-snippet toe aan je diagnostic recipes in memory.
+Als je een diagnostic hebt geschreven die succesvol was en herbruikbaar is:
+1. Voeg het AL-snippet toe aan je **memory** als diagnostic recipe
+2. Overweeg of het ook in `knowledge/diagnostic-recipes.md` thuishoort (generiek genoeg voor alle projecten)
 
 ## Doorlooptijd
 

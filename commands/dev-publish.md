@@ -6,8 +6,9 @@ Compileer en publiceer de AL-app naar de development server uit launch.json, via
 
 $ARGUMENTS — optionele instructies, bijvoorbeeld:
 - (leeg) — standaard: compile + publish met ForceSync
-- "synchronize" — gebruik SchemaUpdateMode=synchronize (niet-destructief)
+- "synchronize" — gebruik SchemaUpdateMode=Synchronize (niet-destructief)
 - "alleen compileren" — compile zonder publish
+- "[configuratienaam]" — gebruik specifieke configuratie uit launch.json (bijv. "accept", "test")
 
 ## Instructies
 
@@ -15,12 +16,13 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 
 1. Zoek het AL-project: de map met `app.json` (bijv. `BC Plants/app.json`).
 2. Lees `app.json` → `name`, `publisher`, `version`.
-3. Lees `<project>/.vscode/launch.json` → eerste configuratie met `type: "al"`:
-   - `server` — BC server URL (bijv. `https://rzdm2`)
-   - `serverInstance` — BC instance (bijv. `bc270`)
-   - `tenant` — (default: `default`)
+3. Lees `<project>/.vscode/launch.json` → configuratie(s) met `type: "al"`:
+   - Als er meerdere configuraties zijn en de gebruiker heeft geen naam opgegeven → vraag welke
+   - Als er één is → gebruik die automatisch
+   - Lees: `server`, `serverInstance`, `tenant` (default: `default`)
 4. Lees `<project>/.vscode/settings.json` → `al.assemblyProbingPaths` array.
 5. Lees credentials uit memory of CLAUDE.md.
+6. Lees `knowledge/al-guidelines.md` voor context bij eventuele compilatiefouten.
 
 ### Stap 1 — Zoek de AL compiler
 
@@ -59,7 +61,16 @@ Op macOS zijn .NET Framework 4.7.2 reference assemblies vereist. De standaardloc
 
 Voeg paden samen als komma-gescheiden string.
 
-### Stap 3 — Compileer
+### Stap 3 — Check .alpackages
+
+```bash
+APP_COUNT=$(find "<project>/.alpackages" -name "*.app" 2>/dev/null | wc -l)
+```
+
+Als `APP_COUNT` = 0 → stop met foutmelding:
+> `.alpackages/` is leeg — geen platform symbols gevonden. Open het project in VS Code en draai "AL: Download Symbols" (Ctrl+Shift+P) om de benodigde symbols te downloaden.
+
+### Stap 4 — Compileer
 
 ```bash
 cd "<project>"
@@ -70,29 +81,57 @@ cd "<project>"
   /assemblyprobingpaths:"<komma-gescheiden bestaande paden>"
 ```
 
-**Vereist:** `.alpackages/` moet gevuld zijn met platform symbols. Als leeg → stop ("draai eerst AL: Download Symbols in VS Code").
-
 Bij compilatiefouten: toon errors en stop. Bij alleen warnings: ga door.
 
-### Stap 4 — Publiceer via Dev Endpoint
+### Stap 5 — Publiceer via Dev Endpoint
 
 ```bash
-curl -sk -X POST \
+RESPONSE=$(curl -sk -X POST \
   "https://<hostname>:7049/<instance>/dev/apps?tenant=<tenant>&SchemaUpdateMode=<syncmode>" \
   -u "<username>:<password>" \
   -F "file=@/tmp/bc-dev-publish.app;type=application/octet-stream" \
-  -w "\nHTTP %{http_code}"
+  -w "\nHTTP_STATUS:%{http_code}" 2>&1)
+
+HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS:" | cut -d: -f2)
 ```
 
 - Gebruik ALTIJD `-F` (multipart), NOOIT `--data-binary` (geeft HTTP 415)
 - `-sk` slaat SSL-validatie over (zelfondertekend cert op dev-servers)
 - HTTP 200 = succes
 
-Foutcodes: 401=credentials, 415=gebruik `-F`, 422=ForceSync proberen, connection refused=dev services uit.
+**Foutcodes en acties:**
+| Code | Oorzaak | Actie |
+|------|---------|-------|
+| 401 | Credentials onjuist | Check username/password in CLAUDE.md of memory |
+| 415 | `--data-binary` gebruikt | Gebruik `-F` (multipart form) |
+| 422 | Schema-conflict | Probeer `ForceSync` als SchemaUpdateMode |
+| Connection refused | Dev services uit | "BC Developer Services staat uit op de server" |
 
-### Stap 5 — Rapporteer
+### Stap 6 — Verifieer publicatie
 
-App naam/versie, server/instance, SchemaUpdateMode, succes of fout.
+Na een succesvolle publish (HTTP 200), verifieer dat de app daadwerkelijk draait:
+
+```bash
+curl -sk -u "<username>:<password>" \
+  "https://<hostname>:7049/<instance>/dev/apps?tenant=<tenant>" \
+  -H "Accept: application/json" 2>/dev/null | \
+  python3 -c "
+import sys, json
+apps = json.load(sys.stdin)
+for app in apps:
+    if app.get('Name','') == '<app-name>':
+        print(f\"Verified: {app['Name']} v{app['Version']} is active\")
+" 2>/dev/null || echo "Publish succeeded (HTTP 200), verification skipped"
+```
+
+### Stap 7 — Rapporteer
+
+Toon:
+- App naam en versie (uit `app.json`)
+- Server/instance (uit `launch.json`)
+- SchemaUpdateMode gebruikt
+- Succes of fout + actie
+- Verificatie-resultaat
 
 ## Regels
 
@@ -100,3 +139,4 @@ App naam/versie, server/instance, SchemaUpdateMode, succes of fout.
 - Lees ALTIJD `settings.json` voor assembly probing paths — raad ze niet.
 - Gebruik ALTIJD `-F` voor de upload, NOOIT `--data-binary`.
 - Filter ALTIJD probing paths op bestaan.
+- Check ALTIJD of `.alpackages` gevuld is vóór compilatie.
