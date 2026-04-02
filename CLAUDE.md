@@ -1,160 +1,109 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working in Business Central AL projects. It is loaded automatically when this plugin is installed.
 
-## What this repo is
+## Proactive Knowledge Loading
 
-A Claude Code plugin for Business Central AL development. Provides 19 skills and a comprehensive BC knowledge base so Claude is immediately productive in any AL project — no context-building needed.
+When you detect you are working in an AL project (any directory with `app.json`), **automatically read the relevant knowledge files from this plugin BEFORE writing or reviewing code**. Do not wait for a slash command — apply this knowledge in every response.
 
-## Development Workflow (Superpowers-inspired)
+### Always read (in any AL context):
 
-Follow this workflow for ALL BC development work. Adapted from [obra/superpowers](https://github.com/obra/superpowers).
+- `al-guidelines.md` — naming conventions, code structure, record operations, error handling, events, performance. **This is your AL style guide. Follow it strictly.**
+- `bc-tables.md` — standard BC table numbers, field numbers, option values. **Use this instead of guessing field numbers.**
 
-### 1. Design before code
-- Never jump into coding. First understand the problem.
-- Read project context: `app.json`, `CLAUDE.md`, recent commits.
-- Propose 2-3 approaches with trade-offs when the solution isn't obvious.
-- Get approval before writing code.
+### Read on-demand based on what the developer is working on:
 
-### 2. Plan with exact details
-- Break work into small tasks (exact file paths, object IDs, procedure names).
-- No vague steps like "add appropriate validation" — be specific.
-- Each task independently verifiable.
+| Developer is working on... | Read this knowledge file |
+|---------------------------|--------------------------|
+| API pages, OData, REST endpoints | `bc-api-patterns.md` |
+| Events, subscribers | `bc-events.md` |
+| Tests | `bc-test-patterns.md` |
+| Upgrade codeunits, obsolete fields | `bc-upgrade-patterns.md` |
+| Permission sets, entitlements | `bc-permissions.md` |
+| Telemetry, Application Insights, KQL | `bc-telemetry-patterns.md` |
+| Copilot, AI capabilities, System.AI | `bc-copilot-patterns.md` |
+| Dataverse, CDS integration | `bc-dataverse.md` |
+| Reports, layouts, RDLC, Word | `bc-reports.md` |
+| CI/CD, GitHub Actions, pipelines | `bc-devops-patterns.md` |
+| BcContainerHelper, PowerShell, containers | `bc-powershell.md` |
+| AppSource submission, compliance | `bc-appsource.md` |
+| Architecture decisions, table design | `bc-architecture-decisions.md` |
+| Performance problems, profiling | `bc-debugging.md` |
+| Code analyzers, linters, rulesets | `bc-static-analysis.md` |
+| BC version differences, migration | `bc-version-matrix.md` |
+| Remote diagnostics, data queries | `diagnostic-recipes.md` |
 
-### 3. Compile-verify cycle (AL equivalent of TDD)
-- The "red-green" cycle: describe expected behavior → make change → compile → publish → verify.
-- Never claim "done" without a successful compile.
-- Use `/dev-publish` after every change to verify.
-- Use `/diagnose` or `/bc-query` to verify behavior on the server.
+### How to find knowledge files
 
-### 4. Systematic debugging
-- Read BC error messages completely.
-- Reproduce consistently before attempting fixes.
-- One hypothesis, one change, verify. No shotgun fixes.
-- After 3 failed attempts: question the approach, escalate to the developer.
+Knowledge files are in the `knowledge/` directory of this plugin. Locate them with:
 
-### 5. Evidence over claims
-- Always compile the app before delivering changes.
-- Show compile output or publish result as evidence.
-- "It should compile" is never acceptable.
-- Run `/bc-review` to verify code quality.
-
-### 6. Small, focused changes
-- One logical change per commit.
-- Functional commit messages (what the user will notice).
-- One issue per PR.
+```bash
+find ~/.claude/plugins/bc-claude-plugin/knowledge \
+     ./.claude/plugins/bc-claude-plugin/knowledge \
+     ~/.local/share/claude/plugins/bc-claude-plugin/knowledge \
+     ~/code/bc-claude-plugin/knowledge \
+     -name "<filename>" 2>/dev/null | head -1
+```
 
 ---
 
 ## Project Context Intake
 
-At the start of every new conversation, if project context is not yet clear, ask the developer these questions — one at a time, stop as soon as the answer is "not relevant":
+At the start of every new conversation in an AL project, if context is not yet clear, ask these questions — one at a time, stop when you have enough:
 
-1. **"BC versie en deployment model?"** (bv. BC26 SaaS, BC23 on-prem, BC14 on-prem legacy)
-2. **"ISV/AppSource app, partner maatwerk, of intern project?"** (bepaalt: AppSourceCop, prefix-regel, entitlements, breaking change beleid)
-3. **"Welke andere apps hangen ervan af, of waarvan ben jij afhankelijk?"** (dependency chain — kritiek voor upgrade- en obsolete-beslissingen)
-4. **"Is er een testomgeving / container beschikbaar, en hoe publiceer je nu?"** (bepaalt welke `/bc-ps` en `/dev-publish` aanpak werkt)
-5. **"Wat is het huidige pijnpunt of de taak van vandaag?"** (focus — sla de rest over als dit al genoeg context geeft)
+1. **"BC versie en deployment model?"** (BC26 SaaS, BC23 on-prem, etc.)
+2. **"ISV/AppSource app, partner maatwerk, of intern project?"**
+3. **"Welke dependency apps heb je?"**
+4. **"Hoe publiceer je nu?"** (container, dev endpoint, etc.)
+5. **"Wat is de taak van vandaag?"**
 
-Once answered, summarize in 3 bullets and confirm before proceeding. Store as session context — no need to ask again within the same session.
-
-If the developer opens with a concrete task, skip straight to it and ask only the questions directly relevant.
+If the developer opens with a concrete task, skip straight to it.
 
 ---
 
 ## Auto-Detect Project Context
 
-When working in an AL project, automatically read and apply:
+When working in an AL project, automatically read:
 - `app.json` → prefix, ID ranges, publisher, runtime version, dependencies
 - `.vscode/launch.json` → server, tenant, environment configurations
 - `.vscode/settings.json` → assembly probing paths, analyzers
-- `.alpackages/` → available dependencies and symbols
-- `AppSourceCop.json` → mandatory affixes, baseline app
-
-Set these as "current project facts" so every command automatically uses them.
+- `AppSourceCop.json` → mandatory affixes, baseline app (if present)
 
 ---
 
-## Skills (19 commands)
+## Development Workflow
 
-### Build & Deploy
-| Skill | Purpose |
-|-------|---------|
+Follow this workflow for ALL BC development work:
+
+1. **Design before code** — understand the problem, propose approaches
+2. **Plan with exact details** — file paths, object IDs, procedure names
+3. **Compile-verify cycle** — compile after every change, verify on server
+4. **Systematic debugging** — read errors completely, one fix at a time
+5. **Evidence over claims** — show compile output, never say "should work"
+6. **Small, focused changes** — one change per commit
+
+---
+
+## Available Commands (19)
+
+| Command | Purpose |
+|---------|---------|
 | `/dev-publish` | Compile & publish AL app to BC dev server |
-| `/bc-ps` | Generate BcContainerHelper PowerShell scripts |
-| `/bc-devops` | Generate/update GitHub Actions CI/CD workflows |
-
-### Diagnostics & Data
-| Skill | Purpose |
-|-------|---------|
 | `/diagnose` | Run remote AL diagnostics via GitHub Actions |
 | `/bc-query` | Data questions in plain language |
-| `/bc-env` | Inspect BC environment: apps, versions, compare |
-
-### Code Quality
-| Skill | Purpose |
-|-------|---------|
+| `/bc-env` | Inspect BC environment: apps, versions |
 | `/bc-review` | Review AL code against Microsoft guidelines |
 | `/bc-perf` | Scan for performance anti-patterns |
 | `/bc-test` | Generate and run AL test codeunits |
-
-### Code Generation
-| Skill | Purpose |
-|-------|---------|
-| `/bc-new` | Scaffold new AL objects (table, page, codeunit, etc.) |
-| `/bc-api` | Generate API page or API query |
-| `/bc-copilot` | Scaffold BC Copilot capability (System.AI) |
-| `/bc-events` | List, subscribe to, or publish BC events |
+| `/bc-new` | Scaffold new AL objects |
+| `/bc-api` | Generate API page or query |
+| `/bc-copilot` | Scaffold BC Copilot capability |
+| `/bc-events` | List, subscribe to, or publish events |
 | `/bc-permissions` | Generate or audit permission sets |
-| `/bc-telemetry` | Add telemetry, review coverage, generate KQL |
-
-### Lifecycle
-| Skill | Purpose |
-|-------|---------|
+| `/bc-telemetry` | Add telemetry, generate KQL |
 | `/bc-upgrade` | Analyze and generate upgrade codeunits |
 | `/bc-migrate` | BC version migration assistant |
-| `/bc-translate` | Sync translations across all XLF files |
-| `/bc-product` | ISV product workflow: spec, roadmap, changelog |
-
-## Knowledge Base (19 files)
-
-Skills read these automatically. No extra setup needed.
-
-| File | Content |
-|------|---------|
-| `al-guidelines.md` | Microsoft AL naming, patterns, performance, events, upgrades |
-| `bc-tables.md` | Standard BC tables with field numbers |
-| `diagnostic-recipes.md` | Proven AL diagnostic snippets |
-| `bc-events.md` | Publisher events catalog per domain |
-| `bc-api-patterns.md` | API page/query patterns and authentication |
-| `bc-test-patterns.md` | Test codeunit structure and library reference |
-| `bc-copilot-patterns.md` | System.AI, PromptDialog, capability registration |
-| `bc-telemetry-patterns.md` | Session.LogMessage, custom dimensions, KQL |
-| `bc-upgrade-patterns.md` | UpgradeTag, DataTransfer, obsolete lifecycle |
-| `bc-permissions.md` | Permission sets, entitlements, audit |
-| `bc-dataverse.md` | CDS integration tables, coupling, sync |
-| `bc-devops-patterns.md` | GitHub Actions, app signing, deployment |
-| `bc-powershell.md` | BcContainerHelper cmdlet reference |
-| `bc-appsource.md` | AppSource submission, compliance, checklist |
-| `bc-architecture-decisions.md` | Senior-level architecture guidance |
-| `bc-version-matrix.md` | Feature availability per BC version |
-| `bc-debugging.md` | Debugging modes, snapshot, profiler, SQL debug |
-| `bc-static-analysis.md` | CodeCop, AppSourceCop, ALCops, rulesets |
-| `bc-reports.md` | Report layouts, rendering syntax, extensions |
-
-## Plugin Structure
-
-```
-.claude-plugin/plugin.json   # Plugin metadata
-commands/                    # Skill definitions (Markdown with YAML frontmatter)
-knowledge/                   # BC knowledge base (Markdown)
-netframework-ref/v4.7.2/     # .NET Framework 4.7.2 DLLs for AL compiler (gitignored)
-```
-
-## Developing Skills
-
-Edit `.md` files in `commands/` for skill behavior, `knowledge/` for shared context. Changes take effect after reinstalling the plugin locally. All skill files have YAML frontmatter with `name`, `description`, and `bc-version`.
-
-## MCP Server Integration (Optional)
-
-For direct BC API access as alternative to GitHub Actions, connect a BC MCP server (Basic Auth) to your Claude Code configuration. This enables `/bc-query` and `/bc-env` to work without the GitHub Actions round-trip.
+| `/bc-translate` | Sync XLF translations |
+| `/bc-product` | ISV spec, roadmap, changelog |
+| `/bc-ps` | Generate BcContainerHelper scripts |
+| `/bc-devops` | Generate GitHub Actions CI/CD workflows |
