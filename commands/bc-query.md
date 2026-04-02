@@ -1,3 +1,9 @@
+---
+name: bc-query
+description: Ask data questions in plain language against a BC environment
+bc-version: ">=14.0"
+---
+
 # BC Query
 
 Stel datavragen aan een BC-omgeving in gewoon Nederlands. Claude schrijft de AL-code, voert de diagnostic uit, en presenteert het resultaat.

@@ -1,3 +1,9 @@
+---
+name: bc-review
+description: Review AL code against Microsoft guidelines and best practices
+bc-version: ">=14.0"
+---
+
 # BC Review
 
 Review AL-code tegen Microsoft-richtlijnen en bewezen patronen. Rapporteer verbeterpunten zonder zelf code te wijzigen (tenzij gevraagd).

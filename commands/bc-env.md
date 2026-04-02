@@ -1,3 +1,9 @@
+---
+name: bc-env
+description: Inspect BC environment - installed apps, versions, compare environments
+bc-version: ">=14.0"
+---
+
 # BC Environment
 
 Inspecteer een BC-omgeving: geïnstalleerde apps, versies, status. Voor developers en consultants.

@@ -1,29 +1,6 @@
 # bc-claude-plugin
 
-Claude Code plugin met skills en een ingebouwde knowledge base voor BC AL-ontwikkeling.
-
-## Skills
-
-| Commando | Doel |
-|----------|------|
-| `/dev-publish` | Compileer en publiceer AL-app naar BC dev server |
-| `/diagnose` | Voer remote AL-diagnostics uit via GitHub Actions |
-| `/bc-translate` | Synchroniseer vertalingen in alle XLF-taalbestanden |
-| `/bc-review` | Review AL-code tegen Microsoft-richtlijnen |
-| `/bc-query` | Stel datavragen in gewoon Nederlands aan een BC-omgeving |
-| `/bc-env` | Inspecteer een BC-omgeving: geinstalleerde apps, versies |
-
-## Knowledge base
-
-De plugin bevat een ingebouwde kennisbank zodat Claude direct productief is in elk BC-project:
-
-| Bestand | Inhoud |
-|---------|--------|
-| `knowledge/al-guidelines.md` | Microsoft AL-naamgeving, patronen, performance, events, upgrades |
-| `knowledge/bc-tables.md` | Standaard BC-tabellen met veldnummers en optie-waarden |
-| `knowledge/diagnostic-recipes.md` | Bewezen AL-snippets voor veelvoorkomende diagnostic queries |
-
-Skills lezen deze bestanden automatisch — geen extra setup nodig.
+Claude Code plugin met 19 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
 
 ---
 
@@ -35,65 +12,96 @@ Skills lezen deze bestanden automatisch — geen extra setup nodig.
 - GitHub CLI (`gh`) — nodig voor `/diagnose` en `/bc-query`
 - VS Code met [AL Language extensie](https://marketplace.visualstudio.com/items?itemName=ms-dynamics-smb.al) — nodig voor `/dev-publish`
 
-### Installeren vanuit GitHub
+### Installeren
 
 ```
 /install-plugin github:appfabriek/bc-claude-plugin
 ```
 
-Dit installeert alle skills en de knowledge base in een keer.
+Dit installeert alle skills en de knowledge base in een keer. Werkt in Claude Code CLI en VS Code extensie.
 
-### Installeren vanuit een lokale map
+### Lokaal installeren (ontwikkeling)
 
 ```
 /install-plugin /pad/naar/bc-claude-plugin
 ```
 
-### Verwijderen
+---
 
-```
-/uninstall-plugin bc-claude-plugin
-```
+## Skills (19 commands)
+
+### Build & Deploy
+
+| Commando | Doel |
+|----------|------|
+| `/dev-publish` | Compileer en publiceer AL-app naar BC dev server |
+| `/bc-ps [taak]` | Genereer BcContainerHelper PowerShell scripts |
+| `/bc-devops [--init\|--update]` | Genereer/update GitHub Actions CI/CD workflows |
+
+### Diagnostics & Data
+
+| Commando | Doel |
+|----------|------|
+| `/diagnose [vraag]` | Remote AL-diagnostics via GitHub Actions |
+| `/bc-query [vraag]` | Datavragen in gewoon Nederlands |
+| `/bc-env [omgeving]` | Inspecteer BC-omgeving: apps, versies, vergelijk |
+
+### Code Quality
+
+| Commando | Doel |
+|----------|------|
+| `/bc-review [bestand]` | Review AL-code tegen Microsoft-richtlijnen |
+| `/bc-perf [--scan\|--query]` | Scan op performance anti-patterns |
+| `/bc-test [codeunit]` | Genereer en voer AL-tests uit |
+
+### Code Generation
+
+| Commando | Doel |
+|----------|------|
+| `/bc-new <type> [naam]` | Scaffold nieuw AL-object |
+| `/bc-api <tabel> [--query]` | Genereer API page of API query |
+| `/bc-copilot <naam>` | Scaffold BC Copilot capability (System.AI) |
+| `/bc-events [--list\|--subscribe\|--publish]` | BC events zoeken, subscriben, publiceren |
+| `/bc-permissions [--generate\|--audit]` | Genereer of audit permission sets |
+| `/bc-telemetry [--add\|--review\|--kql]` | Telemetry toevoegen, reviewen, KQL genereren |
+
+### Lifecycle
+
+| Commando | Doel |
+|----------|------|
+| `/bc-upgrade [--analyze\|--generate]` | Analyseer en genereer upgrade-codeunits |
+| `/bc-migrate [--from X --to Y]` | BC versie-migratie assistent |
+| `/bc-translate` | Vertalingen synchroniseren in alle XLF-bestanden |
+| `/bc-product [--spec\|--roadmap\|--changelog]` | ISV product workflow |
 
 ---
 
-## Gebruik
+## Knowledge Base
 
-### In Claude Code (CLI)
+De plugin bevat een ingebouwde kennisbank van 19 bestanden zodat Claude direct productief is:
 
-Start Claude Code in je AL-projectmap en gebruik de skills:
+| Categorie | Bestanden |
+|-----------|-----------|
+| **AL Development** | `al-guidelines.md`, `bc-tables.md`, `bc-events.md`, `bc-static-analysis.md` |
+| **Patterns** | `bc-api-patterns.md`, `bc-test-patterns.md`, `bc-copilot-patterns.md`, `bc-telemetry-patterns.md` |
+| **Architecture** | `bc-architecture-decisions.md`, `bc-upgrade-patterns.md`, `bc-permissions.md`, `bc-reports.md` |
+| **DevOps** | `bc-devops-patterns.md`, `bc-powershell.md`, `bc-debugging.md` |
+| **ISV** | `bc-appsource.md`, `bc-version-matrix.md`, `bc-dataverse.md` |
+| **Diagnostics** | `diagnostic-recipes.md` |
 
-```bash
-# In je AL-project directory
-claude
+Skills lezen deze bestanden automatisch — geen extra setup nodig.
 
-# Compileer en publiceer
-> /dev-publish
+---
 
-# Publiceer met Synchronize (niet-destructief)
-> /dev-publish synchronize
+## Development Workflow
 
-# Remote diagnostic
-> /diagnose hoeveel open orders zijn er op dev
+De plugin volgt de [Superpowers workflow](https://github.com/obra/superpowers):
 
-# Datavraag in gewoon Nederlands
-> /bc-query top 10 klanten op saldo, omgeving productie
-
-# Code review
-> /bc-review
-
-# Vertalingen synchroniseren
-> /bc-translate
-
-# Omgeving inspecteren
-> /bc-env
-```
-
-### In VS Code (Claude Code extensie)
-
-1. Installeer de [Claude Code extensie](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) in VS Code
-2. Open het Claude Code panel (Cmd+Shift+P → "Claude Code: Open")
-3. Gebruik dezelfde skill-commando's als hierboven
+1. **Design before code** — begrijp het probleem, stel oplossingen voor
+2. **Plan with exact details** — concrete stappen, geen vage instructies
+3. **Compile-verify cycle** — compileer na elke wijziging, verifieer op server
+4. **Systematic debugging** — lees foutmeldingen, één hypothese per keer
+5. **Evidence over claims** — toon compile output, nooit "het zou moeten werken"
 
 ---
 
@@ -101,17 +109,12 @@ claude
 
 ### Stap 1 — Plugin installeren
 
-Elk teamlid voert eenmalig uit in Claude Code:
-
 ```
 /install-plugin github:appfabriek/bc-claude-plugin
 ```
 
 ### Stap 2 — .NET Framework reference assemblies (macOS)
 
-De AL compiler op macOS heeft .NET Framework 4.7.2 reference DLLs nodig. Deze zitten **niet** in de AL extensie zelf.
-
-**Optie A — NuGet (aanbevolen, ~42MB):**
 ```bash
 DEST=~/code/bc-claude-plugin/netframework-ref
 mkdir -p "$DEST"
@@ -119,14 +122,7 @@ nuget install Microsoft.NETFramework.ReferenceAssemblies.net472 -OutputDirectory
 cp -r /tmp/netref/Microsoft.NETFramework.ReferenceAssemblies.net472.*/build/.NETFramework/v4.7.2 "$DEST/"
 ```
 
-**Optie B — Kopieer van een collega:**
-```bash
-cp -r "<collega>/v4.7.2" ~/code/bc-claude-plugin/netframework-ref/v4.7.2
-```
-
 ### Stap 3 — AL project configureren
-
-Voeg de reference assemblies toe aan `.vscode/settings.json` van elk AL-project:
 
 ```json
 {
@@ -137,69 +133,16 @@ Voeg de reference assemblies toe aan `.vscode/settings.json` van elk AL-project:
 }
 ```
 
-### Stap 4 — Credentials instellen
+### Stap 4 — Symbols downloaden
 
-Voeg BC server credentials toe aan de `CLAUDE.md` van je AL-project:
-
-```markdown
-## BC Credentials
-- Username: admin
-- Password: [wachtwoord]
-```
-
-Of sla ze op in Claude's memory (dan hoeven ze niet in een bestand).
-
-### Stap 5 — Symbols downloaden
-
-Open je AL-project in VS Code en draai **AL: Download Symbols** (Ctrl+Shift+P). Dit vult de `.alpackages/` map met de benodigde platform symbols. Zonder symbols kan `/dev-publish` niet compileren.
-
----
-
-## Hoe werken de skills?
-
-### `/dev-publish`
-1. Leest `app.json`, `launch.json`, `settings.json` uit je project
-2. Zoekt de AL compiler (`alc`) in je VS Code extensies
-3. Compileert het project
-4. Publiceert de `.app` via het BC Dev Services REST endpoint
-5. Verifieert dat de app actief is
-
-### `/diagnose`
-1. Schrijft AL diagnostic code op basis van je vraag
-2. Triggert een GitHub Actions workflow die de code uitvoert op de BC-omgeving
-3. Leest het resultaat uit de workflow logs
-4. Presenteert het antwoord
-
-### `/bc-query`
-Zelfde mechanisme als `/diagnose`, maar je stelt de vraag in gewoon Nederlands. Claude schrijft de AL-code en presenteert het resultaat zonder technisch jargon.
-
-### `/bc-translate`
-1. Scant gewijzigde AL-bestanden (git diff) voor nieuwe Caption/ToolTip/Label
-2. Leest het master XLF-bestand (`.g.xlf`)
-3. Voegt ontbrekende trans-units toe aan alle taalbestanden (nl-NL, nl-BE, fr-FR, fr-BE, de-DE)
-
-### `/bc-review`
-1. Leest de AL-richtlijnen uit de knowledge base
-2. Scant je code op naamgeving, performance, foutafhandeling en architectuur
-3. Rapporteert bevindingen per categorie met regelnummers en aanbevelingen
-
-### `/bc-env`
-1. Leest `launch.json` voor server-informatie
-2. Haalt geinstalleerde extensies op via de BC API
-3. Toont een overzicht gesorteerd op publisher
+Open je AL-project in VS Code → **AL: Download Symbols** (Ctrl+Shift+P).
 
 ---
 
 ## Bijdragen
 
-Skills zijn Markdown-bestanden in `commands/`. Knowledge files staan in `knowledge/`. Wijzig het relevante bestand en test door de plugin lokaal te herinstalleren:
+Skills zijn Markdown in `commands/`, knowledge in `knowledge/`. Alle skill files hebben YAML frontmatter. Test door lokaal te herinstalleren:
 
 ```
 /install-plugin /pad/naar/bc-claude-plugin
 ```
-
----
-
-## Waarom .NET Framework 4.7.2 en niet .NET Core?
-
-.NET Core splitst types over tientallen aparte assemblies. Zodra je een .NET Core DLL laadt, breekt de resolutie van andere types (bijv. `WebClient` verliest `Headers`/`UploadValues`). Met de 4.7.2 reference assemblies werkt alles gewoon.

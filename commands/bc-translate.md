@@ -1,3 +1,9 @@
+---
+name: bc-translate
+description: Sync translations across all XLF language files
+bc-version: ">=14.0"
+---
+
 # BC Translate
 
 Synchroniseer vertalingen: voeg ontbrekende trans-units toe aan alle taalbestanden na wijzigingen in AL-code.

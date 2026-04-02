@@ -1,3 +1,9 @@
+---
+name: dev-publish
+description: Compile and publish AL app to BC dev server
+bc-version: ">=14.0"
+---
+
 # BC Dev Publish
 
 Compileer en publiceer de AL-app naar de development server uit launch.json, via het BC Developer Services REST endpoint.

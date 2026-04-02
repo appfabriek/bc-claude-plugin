@@ -1,3 +1,9 @@
+---
+name: diagnose
+description: Run remote AL diagnostics on a BC environment via GitHub Actions
+bc-version: ">=14.0"
+---
+
 # BC Remote Diagnostic
 
 Voer een remote diagnostic uit op een BC-omgeving via de GitHub Actions diagnostic workflow.

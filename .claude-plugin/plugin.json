@@ -1,6 +1,6 @@
 {
   "name": "bc-claude-plugin",
-  "description": "BC AL development toolkit for Claude Code: compile/publish, remote diagnostics, code review, translations, data queries, and environment inspection — with built-in Microsoft AL guidelines and BC knowledge base",
+  "description": "Complete BC AL development toolkit: 19 skills (compile, diagnose, review, test, scaffold, upgrade, migrate, telemetry, copilot, devops, and more) with 19-file knowledge base covering Microsoft AL guidelines, BC tables, events, API patterns, AppSource compliance, and architecture decisions",
   "author": {
     "name": "Appfabriek"
   }
