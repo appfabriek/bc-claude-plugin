@@ -16,6 +16,16 @@ $ARGUMENTS — optionele instructies, bijvoorbeeld:
 - "bestand.al" — scan specifiek bestand
 - "alle" — scan alle AL-bestanden in het project
 - "check" — rapporteer alleen ontbrekende vertalingen, wijzig niets
+- `nl="tekst"` — geef een bekende Nederlandse vertaling mee voor een specifieke Engelse source (zie Stap 3b)
+
+Meerdere vertalingen kunnen worden meegegeven als key=value paren, bijv.:
+```
+/bc-translate nl="Naar SCADA planning verzonden" nl2="Updates verwerkt"
+```
+Of als expliciete source→target mapping (wanneer er meerdere verschillende labels zijn):
+```
+/bc-translate "Sent to SCADA planning"=>"Naar SCADA planning verzonden" "Updates processed"=>"Updates verwerkt"
+```
 
 ## Instructies
 
@@ -70,6 +80,33 @@ Filter de master XLF op trans-units waarvan de `note` verwijst naar objecten in 
 
 **Als "alle":** Gebruik alle trans-units uit de master.
 
+### Stap 3b — Detecteer bekende vertalingen
+
+Bouw een mapping van Engelse source → bekende vertalingen op via twee bronnen:
+
+**A. Automatisch uit de git diff (voor refactor-commits):**
+
+Scan de diff van gewijzigde AL-bestanden op vervangen hardcoded strings:
+```bash
+git diff HEAD~1 HEAD -- [gewijzigde .al bestanden]
+```
+Zoek naar patronen waarbij een hardcoded NL string (`- Message('...')`, `- Error('...')`) is vervangen door een Label-aanroep, terwijl het Label zelf een Engelse source krijgt (`+ Label '...'`). Bijvoorbeeld:
+```
+-        Message('Naar SCADA planning verzonden');
++        Message(TextSCADA);
+...
++        TextSCADA: Label 'Sent to SCADA planning';
+```
+→ mapping: `"Sent to SCADA planning"` → `nl-NL: "Naar SCADA planning verzonden"`, `nl-BE: "Naar SCADA planning verzonden"`
+
+Ondersteunde patronen: `Message(...)`, `Error(...)`, `Confirm(...)`, `StrSubstNo(...)`.
+
+**B. Expliciet via $ARGUMENTS:**
+
+Scan $ARGUMENTS op `"Engelse tekst"=>"NL tekst"` paren. De NL tekst geldt voor zowel nl-NL als nl-BE, tenzij anders opgegeven.
+
+**Prioriteit:** expliciete input overschrijft auto-detectie.
+
 ### Stap 4 — Vergelijk met taalbestanden
 
 Voor elk taalbestand (`<AppName>.<lang>.xlf`):
@@ -81,8 +118,18 @@ Voor elk taalbestand (`<AppName>.<lang>.xlf`):
 
 ### Stap 5 — Voeg ontbrekende trans-units toe
 
-Voor elke ontbrekende trans-unit, voeg toe aan het taalbestand:
+Voor elke ontbrekende trans-unit, bepaal eerst of er een bekende vertaling is uit Stap 3b:
 
+**Als de vertaling bekend is voor deze taal** (bijv. nl-NL via auto-detectie of expliciete input):
+```xml
+<trans-unit id="[id uit master]" translate="yes">
+  <source>[source uit master]</source>
+  <target state="translated">[bekende vertaling]</target>
+  <note from="Xliff Generator" annotates="general" priority="3">[note uit master]</note>
+</trans-unit>
+```
+
+**Als de vertaling onbekend is:**
 ```xml
 <trans-unit id="[id uit master]" translate="yes">
   <source>[source uit master]</source>
@@ -92,8 +139,8 @@ Voor elke ontbrekende trans-unit, voeg toe aan het taalbestand:
 ```
 
 **Regels:**
-- `state="needs-translation"` — markeer dat vertaling nog nodig is
-- Target = source als fallback (zodat de app niet crasht op ontbrekende vertalingen)
+- Gebruik `state="translated"` + bekende tekst wanneer de vertaling bekend is
+- Gebruik `state="needs-translation"` + Engelse fallback wanneer de vertaling onbekend is
 - Voeg toe binnen de `<group id="body">` sectie, gesorteerd op ID
 - Behoud bestaande vertalingen — overschrijf NOOIT een bestaande target
 
@@ -107,14 +154,16 @@ Toon per taalbestand:
 Voorbeeld output:
 ```
 Vertalingen bijgewerkt:
-  nl-NL: +3 trans-units (Customer Name, Order Status, Ship Date)
-  nl-BE: +3 trans-units
-  fr-FR: +3 trans-units
-  fr-BE: +3 trans-units
-  de-DE: +3 trans-units
+  nl-NL: +3 trans-units vertaald (Customer Name, Order Status, Ship Date)
+  nl-BE: +3 trans-units vertaald
+  fr-FR: +3 trans-units → needs-translation
+  fr-BE: +3 trans-units → needs-translation
+  de-DE: +3 trans-units → needs-translation
 
 Let op: 1 verouderde trans-unit gevonden (Old Field Caption) — handmatig verwijderen indien gewenst.
 ```
+
+Vermeld expliciet welke vertalingen automatisch gedetecteerd werden uit de git diff.
 
 ## Regels
 
