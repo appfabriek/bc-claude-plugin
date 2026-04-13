@@ -1,6 +1,6 @@
 # bc-claude-plugin
 
-Claude Code plugin met 22 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
+Claude Code plugin met 23 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
 
 ---
 
@@ -36,29 +36,38 @@ In een Claude Code sessie:
 ### Vereisten
 
 - Claude Code v1.0.33 of hoger (controleer: `claude --version`)
-- GitHub CLI (`gh`) — vereist voor `/diagnose` en `/bc-query`
+- GitHub CLI (`gh`) — vereist voor `/diagnose`, `/bc-runner` en `/bc-query`
 - VS Code met [AL Language extensie](https://marketplace.visualstudio.com/items?itemName=ms-dynamics-smb.al) — vereist voor `/dev-publish`
 
-### Setup voor /diagnose en /bc-query
+### Setup voor /diagnose, /bc-runner en /bc-query
 
-Deze commands vereisen een GitHub Actions workflow in je AL-project. Kopieer het workflow template uit deze plugin naar je project:
+Deze commands vereisen GitHub Actions workflows in je AL-project. Kopieer de workflow templates:
 
 ```bash
+# Voor AL-code diagnostics (al uitvoeren, data opvragen)
 cp ~/code/bc-claude-plugin/templates/bc-diagnostic.yaml \
    /pad/naar/jouw-al-project/.github/workflows/bc-diagnostic.yaml
+
+# Voor NavAdminTool/PowerShell op de BC-server (app-beheer, server admin, SQL)
+cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
+   /pad/naar/jouw-al-project/.github/workflows/bc-runner.yaml
 ```
 
-Stel de volgende GitHub Secrets in voor je repo:
-- `BC_URL_DEV`, `BC_USER_DEV`, `BC_PASS_DEV`
-- `BC_URL_TEST`, `BC_USER_TEST`, `BC_PASS_TEST`
-- `BC_URL_ACCEPT`, `BC_USER_ACCEPT`, `BC_PASS_ACCEPT`
-- `BC_URL_PRODUCTION`, `BC_USER_PRODUCTION`, `BC_PASS_PRODUCTION`
+**Vereisten voor OnPrem self-hosted runners:**
+- Self-hosted runner op de BC-server met labels `self-hosted, Windows, X64, <hostnaam>`
+- NavAdminTool beschikbaar (`C:\Program Files\Microsoft Dynamics 365 Business Central\<versie>\Service\NavAdminTool.ps1`)
+- Pas de `environment` opties en `$envMap` in de workflows aan op je BC-instances
 
-Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `test`, `accept`, `production`) en de AL-omgevingen kunnen bereiken.
+**Vereisten voor `/bc-env` (SaaS/REST):**
+- Stel de volgende GitHub Secrets in als je BC via REST benadert:
+  - `BC_URL_DEV`, `BC_USER_DEV`, `BC_PASS_DEV`
+  - `BC_URL_TEST`, `BC_USER_TEST`, `BC_PASS_TEST`
+  - `BC_URL_ACCEPT`, `BC_USER_ACCEPT`, `BC_PASS_ACCEPT`
+  - `BC_URL_PRODUCTION`, `BC_USER_PRODUCTION`, `BC_PASS_PRODUCTION`
 
 ---
 
-## Skills (22 commands)
+## Skills (23 commands)
 
 ### Workflow
 
@@ -85,7 +94,8 @@ Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `te
 
 | Commando | Doel |
 |----------|------|
-| `/diagnose [vraag]` | Remote AL-diagnostics via GitHub Actions |
+| `/diagnose [vraag]` | Remote AL-diagnostics via GitHub Actions (AL-code uitvoeren op server) |
+| `/bc-runner [taak]` | NavAdminTool/PowerShell op de BC-server: app-beheer, users, SQL, licentie, event log |
 | `/bc-query [vraag]` | Datavragen in gewoon Nederlands |
 | `/bc-env [omgeving]` | Inspecteer BC-omgeving: apps, versies, vergelijk |
 
@@ -121,7 +131,7 @@ Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `te
 
 ## Knowledge Base
 
-De plugin bevat een ingebouwde kennisbank van 20 bestanden zodat Claude direct productief is:
+De plugin bevat een ingebouwde kennisbank van 21 bestanden zodat Claude direct productief is:
 
 | Categorie | Bestanden |
 |-----------|-----------|
@@ -130,7 +140,7 @@ De plugin bevat een ingebouwde kennisbank van 20 bestanden zodat Claude direct p
 | **Architecture** | `bc-architecture-decisions.md`, `bc-upgrade-patterns.md`, `bc-permissions.md`, `bc-reports.md` |
 | **DevOps & Local Dev** | `bc-devops-patterns.md`, `bc-local-dev.md`, `bc-powershell.md`, `bc-debugging.md` |
 | **ISV** | `bc-appsource.md`, `bc-version-matrix.md`, `bc-dataverse.md` |
-| **Diagnostics** | `diagnostic-recipes.md` |
+| **Diagnostics & Remote** | `diagnostic-recipes.md`, `bc-runner-patterns.md` |
 
 Skills lezen deze bestanden automatisch — geen extra setup nodig.
 

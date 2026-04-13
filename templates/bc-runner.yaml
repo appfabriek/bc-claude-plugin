@@ -1,0 +1,166 @@
+name: BC Runner
+
+# Generic PowerShell executor on the self-hosted BC runner.
+# Use this workflow to run NavAdminTool cmdlets, BcContainerHelper, SQL queries,
+# or any other PowerShell remotely on the BC server.
+#
+# Complementary to bc-diagnostic.yaml (which runs AL code).
+# This workflow runs PowerShell directly — no AL compilation needed.
+#
+# Setup:
+#   1. Copy this file to .github/workflows/bc-runner.yaml in your AL project
+#   2. Update the 'environment' input options to match your BC instances
+#   3. Ensure the self-hosted runner has NavAdminTool and BcContainerHelper available
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'BC omgeving'
+        required: true
+        type: choice
+        options:
+          # TODO: replace with your BC instance names (format: "Display name (instance)")
+          - 'Dev (dev)'
+          - 'Poperinge (pop)'
+          - 'Rain (rai)'
+          - 'Stavenhagen (STA)'
+          - 'Steenderen (STE)'
+      script:
+        description: 'PowerShell script body (wordt uitgevoerd na laden van NavAdminTool)'
+        required: true
+        type: string
+      description:
+        description: 'Korte omschrijving (voor audit log / step summary)'
+        required: false
+        type: string
+        default: 'BC Runner script'
+      load_nav_tools:
+        description: 'NavAdminTool laden (false = alleen BcContainerHelper)'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: bc-runner
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: powershell
+
+jobs:
+  runner:
+    name: '${{ inputs.description }} — ${{ inputs.environment }}'
+    runs-on: [ self-hosted, Windows, X64, cos0mb4596 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write script to file
+        env:
+          RUNNER_SCRIPT: ${{ inputs.script }}
+        run: |
+          $scriptFile = Join-Path $env:TEMP "bc-runner-${{ github.run_id }}.ps1"
+          Set-Content -Path $scriptFile -Value $env:RUNNER_SCRIPT -Encoding UTF8
+          "script_file=$scriptFile" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Script geschreven naar: $scriptFile"
+          Write-Host ""
+          Write-Host "=== Script ==="
+          Get-Content $scriptFile
+          Write-Host "=============="
+
+      - name: Load NavAdminTool
+        if: inputs.load_nav_tools == 'true'
+        run: |
+          $bcBase = 'C:\Program Files\Microsoft Dynamics 365 Business Central'
+          $adminTools = Get-ChildItem $bcBase -Directory -ErrorAction SilentlyContinue |
+            Sort-Object { [int]$_.Name } -Descending |
+            ForEach-Object { Join-Path $_.FullName "Service\NavAdminTool.ps1" } |
+            Where-Object { Test-Path $_ } |
+            Select-Object -First 1
+
+          if (-not $adminTools) {
+            Write-Host "::warning::NavAdminTool.ps1 niet gevonden in $bcBase"
+          } else {
+            . $adminTools
+            Write-Host "NavAdminTool geladen: $adminTools"
+          }
+
+          # Sla pad op voor volgende stap
+          "nav_tools_path=$adminTools" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Execute script
+        id: run
+        run: |
+          $envMap = @{
+            # TODO: update met de juiste instance namen voor dit project
+            'Dev (dev)'         = 'dev'
+            'Poperinge (pop)'   = 'pop'
+            'Rain (rai)'        = 'rai'
+            'Stavenhagen (STA)' = 'STA'
+            'Steenderen (STE)'  = 'STE'
+          }
+          $instance = $envMap['${{ inputs.environment }}']
+
+          # Stel omgevingsvariabelen in voor het script
+          $env:BC_INSTANCE   = $instance
+          $env:BC_BASE_PATH  = 'C:\Program Files\Microsoft Dynamics 365 Business Central'
+          $env:REPO_ROOT     = $env:GITHUB_WORKSPACE
+
+          # Laad NavAdminTool opnieuw (stap-scope)
+          if ('${{ inputs.load_nav_tools }}' -eq 'true') {
+            $adminTools = Get-ChildItem $env:BC_BASE_PATH -Directory -ErrorAction SilentlyContinue |
+              Sort-Object { [int]$_.Name } -Descending |
+              ForEach-Object { Join-Path $_.FullName "Service\NavAdminTool.ps1" } |
+              Where-Object { Test-Path $_ } |
+              Select-Object -First 1
+            if ($adminTools) { . $adminTools }
+          }
+
+          # Laad BcContainerHelper indien aanwezig
+          if (Get-Module -ListAvailable -Name BcContainerHelper -ErrorAction SilentlyContinue) {
+            Import-Module BcContainerHelper -ErrorAction SilentlyContinue
+          }
+
+          $scriptFile = Join-Path $env:TEMP "bc-runner-${{ github.run_id }}.ps1"
+          Write-Host ""
+          Write-Host "=== Uitvoeren op instance: $instance ===" -ForegroundColor Cyan
+
+          $output = @()
+          try {
+            & $scriptFile *>&1 | Tee-Object -Variable output
+            $exitCode = $LASTEXITCODE
+          } catch {
+            Write-Host "::error::Script fout: $($_.Exception.Message)" -ForegroundColor Red
+            exit 1
+          }
+
+          Write-Host ""
+          Write-Host "=== Klaar (exit: $exitCode) ===" -ForegroundColor Cyan
+
+          # Cleanup script file
+          Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
+
+          if ($exitCode -and $exitCode -ne 0) { exit $exitCode }
+
+      - name: Step summary
+        if: always()
+        run: |
+          $status = if ('${{ job.status }}' -eq 'success') { ':white_check_mark:' } else { ':x:' }
+          $envName = '${{ inputs.environment }}'
+          $desc = '${{ inputs.description }}'
+          $runUrl = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+
+          @(
+            "## $status BC Runner — $desc",
+            "",
+            "**Omgeving:** $envName",
+            "**Runner:** $env:COMPUTERNAME",
+            "**Tijdstip:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')",
+            "**Run:** $runUrl"
+          ) | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding UTF8

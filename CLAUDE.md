@@ -33,6 +33,7 @@ When you detect you are working in an AL project (any directory with `app.json`)
 | Code analyzers, linters, rulesets | `bc-static-analysis.md` |
 | BC version differences, migration | `bc-version-matrix.md` |
 | Remote diagnostics, data queries | `diagnostic-recipes.md` |
+| NavAdminTool, runner, remote server admin | `bc-runner-patterns.md` |
 
 ### How to find knowledge files
 
@@ -87,7 +88,7 @@ Follow this workflow for ALL BC development work:
 
 ---
 
-## Available Commands (22)
+## Available Commands (23)
 
 | Command | Purpose |
 |---------|---------|
@@ -95,7 +96,8 @@ Follow this workflow for ALL BC development work:
 | `/bc-teststraat` | Set up local BC test environment from scratch: prereqs → container → apps → tests |
 | `/bc-teststraat-verify` | Diagnose current test environment state (Docker, container, apps, last results) |
 | `/dev-publish` | Compile & publish AL app to BC dev server |
-| `/diagnose` | Run remote AL diagnostics via GitHub Actions |
+| `/diagnose` | Run remote AL diagnostics via GitHub Actions (AL code execution) |
+| `/bc-runner` | Execute NavAdminTool/PowerShell on remote BC server (app mgmt, users, SQL, license) |
 | `/bc-query` | Data questions in plain language |
 | `/bc-env` | Inspect BC environment: apps, versions |
 | `/bc-review` | Review AL code against Microsoft guidelines |
