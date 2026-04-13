@@ -86,11 +86,13 @@ Follow this workflow for ALL BC development work:
 
 ---
 
-## Available Commands (20)
+## Available Commands (22)
 
 | Command | Purpose |
 |---------|---------|
 | `/bc-issue` | Pick up a GitHub issue end-to-end: branch → code → build → translate → PR |
+| `/bc-teststraat` | Set up local BC test environment from scratch: prereqs → container → apps → tests |
+| `/bc-teststraat-verify` | Diagnose current test environment state (Docker, container, apps, last results) |
 | `/dev-publish` | Compile & publish AL app to BC dev server |
 | `/diagnose` | Run remote AL diagnostics via GitHub Actions |
 | `/bc-query` | Data questions in plain language |
