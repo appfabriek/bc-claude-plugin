@@ -75,19 +75,22 @@ When working in an AL project, automatically read:
 
 Follow this workflow for ALL BC development work:
 
-1. **Design before code** — understand the problem, propose approaches
-2. **Plan with exact details** — file paths, object IDs, procedure names
-3. **Compile-verify cycle** — compile after every change, verify on server
-4. **Systematic debugging** — read errors completely, one fix at a time
-5. **Evidence over claims** — show compile output, never say "should work"
-6. **Small, focused changes** — one change per commit
+1. **Start with an issue** — use `/bc-issue` to pick up and implement a GitHub issue end-to-end
+2. **Design before code** — understand the problem, propose approaches
+3. **Plan with exact details** — file paths, object IDs, procedure names
+4. **Compile-verify cycle** — compile after every change, verify on server
+5. **Systematic debugging** — read errors completely, one fix at a time
+6. **Evidence over claims** — show compile output, never say "should work"
+7. **Small, focused changes** — one change per commit
+8. **Translations last** — run `/bc-translate` after every change that adds Labels, Captions, or ToolTips
 
 ---
 
-## Available Commands (19)
+## Available Commands (20)
 
 | Command | Purpose |
 |---------|---------|
+| `/bc-issue` | Pick up a GitHub issue end-to-end: branch → code → build → translate → PR |
 | `/dev-publish` | Compile & publish AL app to BC dev server |
 | `/diagnose` | Run remote AL diagnostics via GitHub Actions |
 | `/bc-query` | Data questions in plain language |
@@ -103,7 +106,7 @@ Follow this workflow for ALL BC development work:
 | `/bc-telemetry` | Add telemetry, generate KQL |
 | `/bc-upgrade` | Analyze and generate upgrade codeunits |
 | `/bc-migrate` | BC version migration assistant |
-| `/bc-translate` | Sync XLF translations |
+| `/bc-translate` | Sync XLF translations; auto-detects NL vertalingen uit git diff |
 | `/bc-product` | ISV spec, roadmap, changelog |
 | `/bc-ps` | Generate BcContainerHelper scripts |
 | `/bc-devops` | Generate GitHub Actions CI/CD workflows |
