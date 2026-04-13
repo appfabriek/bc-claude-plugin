@@ -1,6 +1,6 @@
 # bc-claude-plugin
 
-Claude Code plugin met 19 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
+Claude Code plugin met 22 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
 
 ---
 
@@ -58,7 +58,20 @@ Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `te
 
 ---
 
-## Skills (19 commands)
+## Skills (22 commands)
+
+### Workflow
+
+| Commando | Doel |
+|----------|------|
+| `/bc-issue [nummer]` | Pak een GitHub issue op: branch → code → build → vertaling → PR |
+
+### Lokale Teststraat
+
+| Commando | Doel |
+|----------|------|
+| `/bc-teststraat [setup\|reset\|run]` | Opzetten of herstellen lokale BC testomgeving |
+| `/bc-teststraat-verify` | Diagnoseer de staat van de lokale teststraat |
 
 ### Build & Deploy
 
@@ -108,14 +121,14 @@ Zorg dat je GitHub Actions runners de juiste `runs-on` labels hebben (`dev`, `te
 
 ## Knowledge Base
 
-De plugin bevat een ingebouwde kennisbank van 19 bestanden zodat Claude direct productief is:
+De plugin bevat een ingebouwde kennisbank van 20 bestanden zodat Claude direct productief is:
 
 | Categorie | Bestanden |
 |-----------|-----------|
 | **AL Development** | `al-guidelines.md`, `bc-tables.md`, `bc-events.md`, `bc-static-analysis.md` |
 | **Patterns** | `bc-api-patterns.md`, `bc-test-patterns.md`, `bc-copilot-patterns.md`, `bc-telemetry-patterns.md` |
 | **Architecture** | `bc-architecture-decisions.md`, `bc-upgrade-patterns.md`, `bc-permissions.md`, `bc-reports.md` |
-| **DevOps** | `bc-devops-patterns.md`, `bc-powershell.md`, `bc-debugging.md` |
+| **DevOps & Local Dev** | `bc-devops-patterns.md`, `bc-local-dev.md`, `bc-powershell.md`, `bc-debugging.md` |
 | **ISV** | `bc-appsource.md`, `bc-version-matrix.md`, `bc-dataverse.md` |
 | **Diagnostics** | `diagnostic-recipes.md` |
 

@@ -25,6 +25,7 @@ When you detect you are working in an AL project (any directory with `app.json`)
 | Dataverse, CDS integration | `bc-dataverse.md` |
 | Reports, layouts, RDLC, Word | `bc-reports.md` |
 | CI/CD, GitHub Actions, pipelines | `bc-devops-patterns.md` |
+| Lokale teststraat, Docker, containers, .NET assemblies | `bc-local-dev.md` |
 | BcContainerHelper, PowerShell, containers | `bc-powershell.md` |
 | AppSource submission, compliance | `bc-appsource.md` |
 | Architecture decisions, table design | `bc-architecture-decisions.md` |
