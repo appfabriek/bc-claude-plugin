@@ -11,8 +11,8 @@
     {
       "name": "bc-claude-plugin",
       "source": "./",
-      "description": "Complete BC AL development toolkit: 19 commands with 19-file knowledge base covering the full AL development lifecycle.",
-      "version": "1.0.0",
+      "description": "Complete BC AL development toolkit: 22 commands with 20-file knowledge base covering the full AL development lifecycle, local test environments, issue workflows, and translations.",
+      "version": "1.0.4",
       "homepage": "https://github.com/appfabriek/bc-claude-plugin",
       "repository": "https://github.com/appfabriek/bc-claude-plugin"
     }
