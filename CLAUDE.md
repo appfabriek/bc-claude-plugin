@@ -32,8 +32,8 @@ When you detect you are working in an AL project (any directory with `app.json`)
 | Performance problems, profiling | `bc-debugging.md` |
 | Code analyzers, linters, rulesets | `bc-static-analysis.md` |
 | BC version differences, migration | `bc-version-matrix.md` |
-| Remote diagnostics, data queries | `diagnostic-recipes.md` |
-| NavAdminTool, runner, remote server admin | `bc-runner-patterns.md` |
+| Remote diagnostics, data queries via AL code | `diagnostic-recipes.md` |
+| NavAdminTool, versie queries, server admin, log analyse, sessies, deployment, data upgrades | `bc-runner-patterns.md` |
 
 ### How to find knowledge files
 
@@ -81,20 +81,31 @@ This applies to all environment inspection, app queries, version checks, and use
 
 ### Proactively answer common questions via the runner
 
-When the user asks any of these questions — **do not wait for a slash command**, use `/bc-runner` or `/bc-version` directly:
+When the user asks any of these questions — **do not wait for a slash command**. Read the listed knowledge file first, then act directly using the runner pattern it contains.
 
-| Question pattern | Action |
-|-----------------|--------|
-| "welke versie draait op [omgeving]?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` op die instance |
-| "welke versie op alle omgevingen?" | Gebruik `/bc-version` |
-| "welke tag moet ik checkouten voor [omgeving]?" | Gebruik `/bc-version`, correleer met `git tag -l` |
-| "wat draait er op [omgeving]?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` |
-| "wat ging er fout op [omgeving]?" | Gebruik `/bc-log` |
-| "zijn er fouten op [omgeving]?" | Gebruik `/bc-log` |
-| "wie is er ingelogd op [omgeving]?" | Gebruik `/bc-sessions` |
-| "is de deploy geslaagd?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` + check Status == Installed |
+| Question pattern | Read first | Then do |
+|-----------------|------------|---------|
+| "welke versie draait op [omgeving]?" | `bc-runner-patterns.md` | `Get-NAVAppInfo` via `bc-runner.yaml`, toon versie + status |
+| "welke versie op alle omgevingen?" | `bc-runner-patterns.md` | Loop sequentieel over alle instances uit launch.json/CLAUDE.md |
+| "welke tag moet ik checkouten voor [omgeving]?" | `bc-runner-patterns.md` | Versie ophalen → `git tag -l` correleren → `git checkout` suggereren |
+| "wat draait er op [omgeving]?" | `bc-runner-patterns.md` | `Get-NAVAppInfo` alle niet-Microsoft apps |
+| "wat ging er fout op [omgeving]?" | `bc-runner-patterns.md` | Event log + NavLog + Job Queue via runner combineren |
+| "zijn er fouten op [omgeving]?" | `bc-runner-patterns.md` | `Get-WinEvent` + NavLog-bestanden via runner |
+| "wie is er ingelogd op [omgeving]?" | `bc-runner-patterns.md` | `Get-NAVServerSession` via runner |
+| "is de deploy geslaagd?" | `bc-runner-patterns.md` | `Get-NAVAppInfo` + check `Status -eq 'Installed'` + versie vergelijken |
+| "wat is de status van [omgeving]?" | `bc-runner-patterns.md` | Server health: instances, apps, tenant-status |
+| "welke apps staan op NeedsUpgrade?" | `bc-runner-patterns.md` | `Get-NAVAppInfo` filter op Status/NeedsDataUpgrade |
 
 Instance-namen staan in CLAUDE.md van het project of in `.vscode/launch.json` (`serverInstance` veld).
+
+**Hoe knowledge files te vinden:**
+```bash
+find ~/.claude/plugins/bc-claude-plugin/knowledge \
+     ./.claude/plugins/bc-claude-plugin/knowledge \
+     ~/.local/share/claude/plugins/bc-claude-plugin/knowledge \
+     ~/code/bc-claude-plugin/knowledge \
+     -name "bc-runner-patterns.md" 2>/dev/null | head -1
+```
 
 ---
 
