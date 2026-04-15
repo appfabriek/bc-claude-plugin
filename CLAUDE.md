@@ -88,7 +88,7 @@ Follow this workflow for ALL BC development work:
 
 ---
 
-## Available Commands (23)
+## Available Commands (25)
 
 | Command | Purpose |
 |---------|---------|
@@ -98,6 +98,8 @@ Follow this workflow for ALL BC development work:
 | `/dev-publish` | Compile & publish AL app to BC dev server |
 | `/diagnose` | Run remote AL diagnostics via GitHub Actions (AL code execution) |
 | `/bc-runner` | Execute NavAdminTool/PowerShell on remote BC server (app mgmt, users, SQL, license) |
+| `/bc-sessions` | View active BC user sessions; remove stuck sessions |
+| `/bc-data-upgrade` | Manage data upgrade lifecycle: start, monitor, resume, stop |
 | `/bc-query` | Data questions in plain language |
 | `/bc-env` | Inspect BC environment: apps, versions |
 | `/bc-review` | Review AL code against Microsoft guidelines |

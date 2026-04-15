@@ -1,6 +1,6 @@
 # bc-claude-plugin
 
-Claude Code plugin met 23 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
+Claude Code plugin met 25 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
 
 ---
 
@@ -67,7 +67,7 @@ cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
 
 ---
 
-## Skills (23 commands)
+## Skills (25 commands)
 
 ### Workflow
 
@@ -96,6 +96,8 @@ cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
 |----------|------|
 | `/diagnose [vraag]` | Remote AL-diagnostics via GitHub Actions (AL-code uitvoeren op server) |
 | `/bc-runner [taak]` | NavAdminTool/PowerShell op de BC-server: app-beheer, users, SQL, licentie, event log |
+| `/bc-sessions [omgeving]` | Bekijk actieve sessies; verwijder stuck sessies |
+| `/bc-data-upgrade [omgeving]` | Data upgrade lifecycle: status, start, hervatten, stoppen |
 | `/bc-query [vraag]` | Datavragen in gewoon Nederlands |
 | `/bc-env [omgeving]` | Inspecteer BC-omgeving: apps, versies, vergelijk |
 

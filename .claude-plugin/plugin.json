@@ -1,7 +1,7 @@
 {
   "name": "bc-claude-plugin",
-  "version": "1.0.5",
-  "description": "Complete BC AL development toolkit: 23 commands with 21-file knowledge base covering AL guidelines, BC tables, events, API patterns, local dev setup, AppSource compliance, architecture decisions, and remote OnPrem runner execution.",
+  "version": "1.0.6",
+  "description": "Complete BC AL development toolkit: 25 commands with 21-file knowledge base covering AL guidelines, BC tables, events, API patterns, local dev setup, AppSource compliance, architecture decisions, and remote OnPrem runner execution including session and data upgrade management.",
   "author": {
     "name": "Appfabriek"
   },
