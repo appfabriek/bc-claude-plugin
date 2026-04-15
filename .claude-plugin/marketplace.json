@@ -11,8 +11,8 @@
     {
       "name": "bc-claude-plugin",
       "source": "./",
-      "description": "Complete BC AL development toolkit: 25 commands with 21-file knowledge base covering the full AL development lifecycle, local test environments, issue workflows, translations, and remote OnPrem runner execution with session and data upgrade management.",
-      "version": "1.0.6",
+      "description": "Complete BC AL development toolkit: 27 commands with 21-file knowledge base. NavAdminTool-first: version tracking across environments, unified log viewer, session management, data upgrades, and full remote OnPrem server administration.",
+      "version": "1.0.7",
       "homepage": "https://github.com/appfabriek/bc-claude-plugin",
       "repository": "https://github.com/appfabriek/bc-claude-plugin"
     }

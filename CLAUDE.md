@@ -67,9 +67,34 @@ If the developer opens with a concrete task, skip straight to it.
 
 When working in an AL project, automatically read:
 - `app.json` → prefix, ID ranges, publisher, runtime version, dependencies
-- `.vscode/launch.json` → server, tenant, environment configurations
+- `.vscode/launch.json` → server, tenant, environment configurations (instance names for NavAdminTool)
 - `.vscode/settings.json` → assembly probing paths, analyzers
 - `AppSourceCop.json` → mandatory affixes, baseline app (if present)
+
+---
+
+## Remote Server Access — Always NavAdminTool
+
+**Never use REST API or curl to query BC environments.** Always use NavAdminTool via the self-hosted runner (`bc-runner.yaml`).
+
+This applies to all environment inspection, app queries, version checks, and user management. REST access is unreliable on OnPrem (self-signed certs, Windows auth, firewall). NavAdminTool runs on the server itself and has access to everything.
+
+### Proactively answer common questions via the runner
+
+When the user asks any of these questions — **do not wait for a slash command**, use `/bc-runner` or `/bc-version` directly:
+
+| Question pattern | Action |
+|-----------------|--------|
+| "welke versie draait op [omgeving]?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` op die instance |
+| "welke versie op alle omgevingen?" | Gebruik `/bc-version` |
+| "welke tag moet ik checkouten voor [omgeving]?" | Gebruik `/bc-version`, correleer met `git tag -l` |
+| "wat draait er op [omgeving]?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` |
+| "wat ging er fout op [omgeving]?" | Gebruik `/bc-log` |
+| "zijn er fouten op [omgeving]?" | Gebruik `/bc-log` |
+| "wie is er ingelogd op [omgeving]?" | Gebruik `/bc-sessions` |
+| "is de deploy geslaagd?" | Trigger `bc-runner.yaml`: `Get-NAVAppInfo` + check Status == Installed |
+
+Instance-namen staan in CLAUDE.md van het project of in `.vscode/launch.json` (`serverInstance` veld).
 
 ---
 
@@ -88,7 +113,7 @@ Follow this workflow for ALL BC development work:
 
 ---
 
-## Available Commands (25)
+## Available Commands (27)
 
 | Command | Purpose |
 |---------|---------|
@@ -100,8 +125,10 @@ Follow this workflow for ALL BC development work:
 | `/bc-runner` | Execute NavAdminTool/PowerShell on remote BC server (app mgmt, users, SQL, license) |
 | `/bc-sessions` | View active BC user sessions; remove stuck sessions |
 | `/bc-data-upgrade` | Manage data upgrade lifecycle: start, monitor, resume, stop |
+| `/bc-version` | Show app version per environment, correlate with git tags for debugging |
+| `/bc-log` | Unified log viewer: event log + NavLog files + job queue errors |
 | `/bc-query` | Data questions in plain language |
-| `/bc-env` | Inspect BC environment: apps, versions |
+| `/bc-env` | Inspect BC environment: apps, versions (NavAdminTool) |
 | `/bc-review` | Review AL code against Microsoft guidelines |
 | `/bc-perf` | Scan for performance anti-patterns |
 | `/bc-test` | Generate and run AL test codeunits |
