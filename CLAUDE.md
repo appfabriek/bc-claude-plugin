@@ -10,6 +10,7 @@ When you detect you are working in an AL project (any directory with `app.json`)
 
 - `al-guidelines.md` — naming conventions, code structure, record operations, error handling, events, performance. **This is your AL style guide. Follow it strictly.**
 - `bc-tables.md` — standard BC table numbers, field numbers, option values. **Use this instead of guessing field numbers.**
+- `macos-alc.md` — compiling AL on macOS: `alc` works; known Framework-only interop errors are not your change. **Never say you cannot compile on macOS because of those errors.**
 
 ### Read on-demand based on what the developer is working on:
 
