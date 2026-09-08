@@ -1,7 +1,7 @@
 {
   "name": "bc-claude-plugin",
   "version": "1.0.7",
-  "description": "Complete BC AL development toolkit: 27 commands with 21-file knowledge base. Covers AL development, OnPrem runner execution (version tracking, log aggregation, session management, data upgrades), and full NavAdminTool integration. Never uses REST — always NavAdminTool.",
+  "description": "Complete BC AL development toolkit: 28 commands with 23-file knowledge base. Covers AL development, OnPrem runner execution (version tracking, log aggregation, session management, data upgrades), C/SIDE finsql import/compile, and full NavAdminTool integration. Never uses REST — always NavAdminTool.",
   "author": {
     "name": "Appfabriek"
   },

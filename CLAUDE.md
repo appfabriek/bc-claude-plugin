@@ -35,6 +35,7 @@ When you detect you are working in an AL project (any directory with `app.json`)
 | BC version differences, migration | `bc-version-matrix.md` |
 | Remote diagnostics, data queries via AL code | `diagnostic-recipes.md` |
 | NavAdminTool, versie queries, server admin, log analyse, sessies, deployment, data upgrades | `bc-runner-patterns.md` |
+| C/SIDE txt import, finsql, RTC development environment | `bc-finsql.md` |
 
 ### How to find knowledge files
 
@@ -125,7 +126,7 @@ Follow this workflow for ALL BC development work:
 
 ---
 
-## Available Commands (27)
+## Available Commands (28)
 
 | Command | Purpose |
 |---------|---------|
@@ -155,4 +156,5 @@ Follow this workflow for ALL BC development work:
 | `/bc-translate` | Sync XLF translations; auto-detects NL vertalingen uit git diff |
 | `/bc-product` | ISV spec, roadmap, changelog |
 | `/bc-ps` | Generate BcContainerHelper scripts |
+| `/bc-finsql` | Import/compile C/SIDE txt objects via bundled KMT finsql script (no hand-rolled finsql) |
 | `/bc-devops` | Generate GitHub Actions CI/CD workflows |
