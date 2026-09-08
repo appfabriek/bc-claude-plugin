@@ -11,7 +11,7 @@
     {
       "name": "bc-claude-plugin",
       "source": "./",
-      "description": "Complete BC AL development toolkit: 27 commands with 21-file knowledge base. NavAdminTool-first: version tracking across environments, unified log viewer, session management, data upgrades, and full remote OnPrem server administration.",
+      "description": "Complete BC AL development toolkit: 28 commands with 23-file knowledge base. NavAdminTool-first: version tracking across environments, unified log viewer, session management, data upgrades, C/SIDE finsql import/compile, and full remote OnPrem server administration.",
       "version": "1.0.7",
       "homepage": "https://github.com/appfabriek/bc-claude-plugin",
       "repository": "https://github.com/appfabriek/bc-claude-plugin"

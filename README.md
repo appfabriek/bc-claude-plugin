@@ -1,6 +1,6 @@
 # bc-claude-plugin
 
-Claude Code plugin met 27 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
+Claude Code plugin met 28 skills en een ingebouwde knowledge base voor BC AL-ontwikkeling. Maakt Claude tot een BC-expert die direct productief is in elk AL-project.
 
 ---
 
@@ -67,7 +67,7 @@ cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
 
 ---
 
-## Skills (27 commands)
+## Skills (28 commands)
 
 ### Workflow
 
@@ -88,6 +88,7 @@ cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
 |----------|------|
 | `/dev-publish` | Compileer en publiceer AL-app naar BC dev server |
 | `/bc-ps [taak]` | Genereer BcContainerHelper PowerShell scripts |
+| `/bc-finsql [txt of id]` | Importeer/compileer C/SIDE `.txt` via het gebundelde KMT finsql-script |
 | `/bc-devops [--init\|--update]` | Genereer/update GitHub Actions CI/CD workflows |
 
 ### Diagnostics & Data
@@ -135,14 +136,14 @@ cp ~/code/bc-claude-plugin/templates/bc-runner.yaml \
 
 ## Knowledge Base
 
-De plugin bevat een ingebouwde kennisbank van 21 bestanden zodat Claude direct productief is:
+De plugin bevat een ingebouwde kennisbank van 23 bestanden zodat Claude direct productief is:
 
 | Categorie | Bestanden |
 |-----------|-----------|
-| **AL Development** | `al-guidelines.md`, `bc-tables.md`, `bc-events.md`, `bc-static-analysis.md` |
+| **AL Development** | `al-guidelines.md`, `bc-tables.md`, `bc-events.md`, `bc-static-analysis.md`, `macos-alc.md` |
 | **Patterns** | `bc-api-patterns.md`, `bc-test-patterns.md`, `bc-copilot-patterns.md`, `bc-telemetry-patterns.md` |
 | **Architecture** | `bc-architecture-decisions.md`, `bc-upgrade-patterns.md`, `bc-permissions.md`, `bc-reports.md` |
-| **DevOps & Local Dev** | `bc-devops-patterns.md`, `bc-local-dev.md`, `bc-powershell.md`, `bc-debugging.md` |
+| **DevOps & Local Dev** | `bc-devops-patterns.md`, `bc-local-dev.md`, `bc-powershell.md`, `bc-debugging.md`, `bc-finsql.md` |
 | **ISV** | `bc-appsource.md`, `bc-version-matrix.md`, `bc-dataverse.md` |
 | **Diagnostics & Remote** | `diagnostic-recipes.md`, `bc-runner-patterns.md` |
 
@@ -198,7 +199,7 @@ Open je AL-project in VS Code → **AL: Download Symbols** (Ctrl+Shift+P).
 
 ## Bijdragen
 
-Skills zijn Markdown in `commands/`, knowledge in `knowledge/`. Alle skill files hebben YAML frontmatter. Test door lokaal te herinstalleren:
+Skills zijn Markdown in `commands/`, knowledge in `knowledge/`, scripts in `scripts/`. Alle skill files hebben YAML frontmatter. Test door lokaal te herinstalleren:
 
 ```
 /install-plugin /pad/naar/bc-claude-plugin
