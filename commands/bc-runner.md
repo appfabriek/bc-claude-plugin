@@ -103,6 +103,23 @@ gh workflow run bc-runner.yaml \
 
 **Meerdere omgevingen**: trigger **sequentieel** (wacht op elke run voordat de volgende start). De self-hosted runner kan maar 1 job tegelijk draaien.
 
+### Stap 3b — Productie-approval-gate
+
+Heeft `bc-runner.yaml` een approval-job voor productie-targets (bijv. job `Productie-goedkeuring` die een GitHub-issue `[APPROVAL] ...` aanmaakt), dan draait het script op productie pas na menselijke goedkeuring. Dat geldt ook voor read-only scripts: de workflow kan niet zien wat een script doet.
+
+- **Vóór de dispatch**: GitHub draait de workflow-definitie van de gedispatchte ref. Controleer daarom op díe ref dat de gate er staat:
+  ```bash
+  git show <ref>:.github/workflows/bc-runner.yaml | grep -n "Productie-goedkeuring"
+  ```
+  Vereist het project een gate (zie CLAUDE.md/AGENTS.md) en mist hij op die ref: **stop** en dispatch niet naar productie.
+- **Na de dispatch** (`RUN_ID` zoals in Stap 4): zoek het goedkeurings-issue (de run-ID staat in de titel) en meld de URL aan de gebruiker:
+  ```bash
+  gh issue list --state open --search "in:title $RUN_ID"
+  ```
+- Alleen de aangewezen approver geeft vrij, met een comment die **exact** `/approve` is; `/deny` annuleert. Plaats **nooit** zelf `/approve` of `/deny` en simuleer geen goedkeuring, ook niet als je `gh`-token als de approver is ingelogd.
+- `gh run watch` wacht door tot de gate besloten is (timeout volgens de workflow). Een mislukte approval-job betekent: niets uitgevoerd op de server.
+- Maak het script leesbaar voor de approver: roep op productie liever een script uit de repo aan dan een base64-blob.
+
 ### Stap 4 — Wacht op resultaat
 
 ```bash
@@ -262,5 +279,6 @@ Write-Host "=== Klaar ==="
 - **Admin/destructief**: vraag expliciete bevestiging — herstel is soms onmogelijk
 - **ForceSync**: alleen op omgevingen die dit expliciet toestaan per CLAUDE.md
 - **Sequentieel**: nooit meerdere runner-jobs parallel triggeren
+- **Productie-gate**: een productie-run wacht op exact `/approve` van de approver (Stap 3b); nooit zelf goedkeuren, en nooit dispatchen vanaf een ref zonder de vereiste gate
 - Gebruik `bc-diagnostic.yaml` (via `/diagnose`) als je AL-code nodig hebt; gebruik `bc-runner.yaml` voor alles wat PowerShell is
 - Sla herbruikbare scripts op in memory als ze succesvol waren
