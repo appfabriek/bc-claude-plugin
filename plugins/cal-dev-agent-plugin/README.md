@@ -7,13 +7,14 @@ Claude Code plugin voor C/AL ontwikkeling in Business Central 14, NAV 2009–201
 ## Installatie
 
 ```bash
-git clone https://github.com/appfabriek/cal-dev-agent-plugin.git ~/code/cal-dev-agent-plugin
+git clone https://github.com/appfabriek/bc-claude-plugin.git ~/code/bc-claude-plugin
+# deze plugin staat in ~/code/bc-claude-plugin/plugins/cal-dev-agent-plugin
 ```
 
 In een Claude Code / Copilot / Gemini sessie:
 
 ```
-/plugin install /pad/naar/cal-dev-agent-plugin
+/plugin install ~/code/bc-claude-plugin/plugins/cal-dev-agent-plugin
 ```
 
 ### Vereisten
