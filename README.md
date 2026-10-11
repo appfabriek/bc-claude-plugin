@@ -15,6 +15,13 @@ In een Claude Code sessie:
 /plugin install bc-claude-plugin@bc-claude-plugin
 ```
 
+Voor C/AL (BC14, NAV 2009–2018, klassiek Navision) staat in dezelfde marketplace ook
+[`cal-dev-agent-plugin`](plugins/cal-dev-agent-plugin/README.md), voorheen een losse repo:
+
+```
+/plugin install cal-dev-agent-plugin@bc-claude-plugin
+```
+
 ### Lokaal installeren
 
 ```bash
