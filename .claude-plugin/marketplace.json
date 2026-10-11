@@ -5,7 +5,7 @@
     "url": "https://github.com/appfabriek"
   },
   "metadata": {
-    "description": "Business Central AL development toolkit for Claude Code"
+    "description": "Business Central AL and C/AL development toolkits for Claude Code"
   },
   "plugins": [
     {
@@ -14,6 +14,14 @@
       "description": "Complete BC AL development toolkit: 28 commands with 23-file knowledge base. NavAdminTool-first: version tracking across environments, unified log viewer, session management, data upgrades, C/SIDE finsql import/compile, and full remote OnPrem server administration.",
       "version": "1.0.7",
       "homepage": "https://github.com/appfabriek/bc-claude-plugin",
+      "repository": "https://github.com/appfabriek/bc-claude-plugin"
+    },
+    {
+      "name": "cal-dev-agent-plugin",
+      "source": "./plugins/cal-dev-agent-plugin",
+      "description": "C/AL development toolkit: export/import objects, git management, code review, deployment, and migration patterns for BC14, NAV 2009-2018, and classic Navision.",
+      "version": "1.5.0",
+      "homepage": "https://github.com/appfabriek/bc-claude-plugin/tree/main/plugins/cal-dev-agent-plugin",
       "repository": "https://github.com/appfabriek/bc-claude-plugin"
     }
   ]
