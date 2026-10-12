@@ -367,7 +367,9 @@ Build genereert `Translations/<AppName>.g.xlf` (source only).
 
 ### Taalbestanden
 
-Kopieer `.g.xlf` naar `<AppName>.<lang>.xlf` en voeg `<target>` elementen toe:
+Elk taalbestand `<AppName>.<lang>.xlf` bevat per trans-unit uit de g.xlf een `<target>`. Beheer ze met
+**NAB AL Tools** (refresh vanuit g.xlf + vertalen), niet met de hand of met eigen scripts — zie `/bc-translate`.
+Een trans-unit ziet er zo uit:
 
 ```xml
 <trans-unit id="Table 123 - Field 456 - Property 2879900210" translate="yes">
@@ -380,14 +382,20 @@ Kopieer `.g.xlf` naar `<AppName>.<lang>.xlf` en voeg `<target>` elementen toe:
 ### States
 
 - `needs-translation` — target nog niet vertaald
+- `needs-review-translation` / `needs-adaptation` — suggestie of bron gewijzigd; controleren
 - `translated` — vertaling aanwezig
 - `final` — goedgekeurd
+
+BC kiest een vertaling op trans-unit-ID: na een bronwijziging blijft de oude vertaling zichtbaar tot de unit opnieuw vertaald is.
 
 ### Regels
 
 - Eén XLF-bestand per taal
 - `Locked = true` op labels → wordt NIET opgenomen in XLF
-- Bij elke nieuwe Caption/ToolTip/Label: trans-unit toevoegen aan ALLE taalbestanden
+- Bij elke nieuwe of gewijzigde Caption/ToolTip/Label: ALLE taalbestanden bijwerken via NAB (`/bc-translate`)
+- NAB-tooling headless: refresh-CLI `~/.vscode/extensions/nabsolutions.nab-al-tools-*/dist/cli/RefreshXLF.js`;
+  MCP-server uit dezelfde extensie (`dist/mcp/server.js`, ≥ 1.48). Het npm-pakket `@nabsolutions/nab-al-tools-mcp`
+  1.43 kent `NAB.UseTargetStates` niet en stript `state="translated"` — niet gebruiken
 
 ---
 

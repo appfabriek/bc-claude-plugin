@@ -2,173 +2,109 @@
 name: bc-translate
 description: Sync translations across all XLF language files
 bc-version: ">=14.0"
-allowed-tools: Bash, Read, Write
+allowed-tools: Bash, Read, Write, mcp__nab-al-tools
 ---
 
 # BC Translate
 
-Synchroniseer vertalingen: voeg ontbrekende trans-units toe aan alle taalbestanden na wijzigingen in AL-code.
+Synchroniseer vertalingen na wijzigingen in AL-code: units toevoegen/bijwerken met **NAB AL Tools' eigen code**,
+vertalingen ter akkoord voorleggen, opslaan via de NAB MCP-server en aantonen dat geen bestaande vertaling omviel.
+
+**Nooit** trans-units zelf in XLF-bestanden schrijven (geen regex/eigen scripts). NAB doet de plaatsing, states,
+exact-match en hint-notes; handwerk wijkt daar ongemerkt van af.
 
 ## Input
 
 $ARGUMENTS — optionele instructies, bijvoorbeeld:
-- (leeg) — scan git diff voor nieuwe/gewijzigde Caption, ToolTip, Label
-- "bestand.al" — scan specifiek bestand
-- "alle" — scan alle AL-bestanden in het project
-- "check" — rapporteer alleen ontbrekende vertalingen, wijzig niets
-- `nl="tekst"` — geef een bekende Nederlandse vertaling mee voor een specifieke Engelse source (zie Stap 3b)
+- (leeg) — synchroniseer en vertaal alles wat nieuw of gewijzigd is
+- "check" — alleen rapporteren (wat ontbreekt / te reviewen), niets wijzigen
+- `nl="tekst"` of `"Engelse bron"=>"NL tekst"` — bekende vertaling meegeven (gaat vóór eigen voorstel; geldt voor nl-NL en nl-BE)
 
-Meerdere vertalingen kunnen worden meegegeven als key=value paren, bijv.:
-```
-/bc-translate nl="Naar SCADA planning verzonden" nl2="Updates verwerkt"
-```
-Of als expliciete source→target mapping (wanneer er meerdere verschillende labels zijn):
 ```
 /bc-translate "Sent to SCADA planning"=>"Naar SCADA planning verzonden" "Updates processed"=>"Updates verwerkt"
 ```
 
 ## Instructies
 
-### Stap 0 — Lees projectcontext
+### Stap 0 — Projectcontext
 
-1. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin.
-    Zoek het bestand met: `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
-    Als het niet gevonden wordt, meld dit en vraag of de plugin correct geïnstalleerd is.
-   
-2. Zoek het AL-project: de map met `app.json`.
-3. Lees `app.json` → `name` (gebruikt in XLF-bestandsnamen).
-4. Controleer of `"features": ["TranslationFile"]` aan staat in `app.json`. Zo niet → meld dit en stop.
+1. Lees `al-guidelines.md` uit de knowledge/ map van de bc-claude-plugin:
+   `find ~/.claude/plugins/bc-claude-plugin/knowledge ./.claude/plugins/bc-claude-plugin/knowledge ~/.local/share/claude/plugins/bc-claude-plugin/knowledge ~/code/bc-claude-plugin/knowledge -name "al-guidelines.md" 2>/dev/null | head -1`
+2. Zoek het AL-project (map met `app.json`), lees `name`, en controleer `"features": ["TranslationFile"]` — zo niet: meld en stop.
+3. Zoek de workspace-file (`*.code-workspace` in repo-root) — NAB-settings zoals `NAB.UseTargetStates` staan daar.
+4. Lees de projectinstructies (AGENTS.md / CLAUDE.md / docs over vertalingen). **Heeft het project eigen
+   vertaalscripts, gebruik die** — bijv. `scripts/refresh-xlf.sh`, `scripts/gxlf-mac.sh`, `scripts/Test-XlfRegression.ps1`.
 
-### Stap 1 — Zoek taalbestanden
+### Stap 1 — Verse g.xlf
 
-Zoek alle XLF-bestanden in het project:
+De g.xlf moet uit de huidige broncode komen (anders mis je units of zie je verouderde bronnen).
+- Project-script aanwezig (bijv. `gxlf-mac.sh`): draai dat.
+- Anders: bouw het project (`AL: Package` / alc). Op macOS lukt dat vaak niet door .NET-interop-errors — zie de
+  macOS-sectie in `al-guidelines.md`; bouw dan een scratch-kopie waarin alleen de interop-types/-aanroepen zijn
+  geneutraliseerd (die bevatten geen vertaalbare teksten), en raak de echte broncode niet aan.
 
-```bash
-find "<project>" -name "*.xlf" -not -path "*/.alpackages/*" | sort
-```
+### Stap 2 — Units synchroniseren met NAB (niet zelf)
 
-Verwachte bestanden:
-- `<AppName>.g.xlf` — master (gegenereerd door compiler, source only)
-- `<AppName>.<lang>.xlf` — taalbestanden (source + target)
+- Project-script (bijv. `refresh-xlf.sh`): draai dat (`--check-only` bij "check").
+- Anders de officiële NAB-refresh als CLI uit de VS Code-extensie:
+  ```bash
+  NAB_CLI=$(ls -d ~/.vscode/extensions/nabsolutions.nab-al-tools-*/dist/cli/RefreshXLF.js | sort -V | tail -1)
+  node "$NAB_CLI" "<app-folder>" "<workspace>.code-workspace"            # wijzigt
+  node "$NAB_CLI" "<app-folder>" "<workspace>.code-workspace" --check-only  # alleen rapport
+  ```
+- **Niet** de MCP-tool `refreshXlf` van het npm-pakket `@nabsolutions/nab-al-tools-mcp` 1.43: die kent
+  `NAB.UseTargetStates` niet en stript alle `state="translated"`.
 
-**Ondersteunde talen:** nl-NL, nl-BE, fr-FR, fr-BE, de-DE
+Bij "check": rapporteer de NAB-tellingen per taal en stop.
 
-Als er taalbestanden ontbreken → meld welke er missen, maar ga door met de bestanden die er zijn.
+### Stap 3 — Wat moet vertaald worden
 
-### Stap 2 — Lees het master-bestand
+Via de NAB MCP-server (zie Stap 5 voor de juiste server): `initialize` (met `appFolderPath` en `workspaceFilePath`),
+daarna per taalbestand `getTextsToTranslate` (en `getTranslatedTextsByState` voor `needs-review-translation`).
+Zonder MCP: zoek in de taal-XLF's naar `state="needs-translation"`, `needs-review-translation`, `needs-adaptation`.
 
-Lees `<AppName>.g.xlf` en extraheer alle trans-unit IDs met hun source-tekst.
+Let op bij **gewijzigde bron**: BC kiest een vertaling op trans-unit-ID, dus tot de unit opnieuw vertaald is ziet
+de gebruiker de oude vertaling bij de nieuwe bron. Deze units horen er altijd bij.
 
-Structuur van een trans-unit:
-```xml
-<trans-unit id="Table 123 - Field 456 - Property 2879900210" size-unit="char" maxwidth="0" al-object-target="..." translate="yes">
-  <source>Customer Name</source>
-  <note from="Xliff Generator" annotates="general" priority="3">Table MyTable - Field CustomerName - Property Caption</note>
-</trans-unit>
-```
+### Stap 4 — Voorstel ter akkoord
 
-### Stap 3 — Bepaal scope
+Bouw een tabel per unit: bron (EN) · waar (object/control) · NL · DE · FR (nl-BE = nl-NL, fr-BE = fr-FR tenzij
+het project anders wil). Gebruik eerst bekende vertalingen:
+- uit $ARGUMENTS (gaat voor alles);
+- uit de git diff: een hardcoded NL-string die door een Label met Engelse source is vervangen
+  (`- Message('Naar SCADA planning verzonden')` → `+ TextSCADA: Label 'Sent to SCADA planning'`);
+- bestaande vertalingen van dezelfde/vergelijkbare bron in de taalbestanden (consistentie);
+- `getGlossaryTerms` voor BC-standaardtermen.
+Behoud placeholders (`%1`, `%2%3`) exact. Meld waar je afwijkt van een bestaand patroon.
 
-**Als git diff (standaard):**
-```bash
-cd "<project>"
-git diff --name-only HEAD | grep "\.al$"
-```
-Filter de master XLF op trans-units waarvan de `note` verwijst naar objecten in gewijzigde bestanden.
+**Wacht op akkoord** — sla niets op zonder expliciete goedkeuring van de gebruiker.
 
-**Als specifiek bestand:** Filter op objectnaam uit dat bestand.
+### Stap 5 — Opslaan via NAB MCP
 
-**Als "alle":** Gebruik alle trans-units uit de master.
+`saveTranslatedTexts` per taalbestand (batch), na `initialize`. Controleer eerst welke server draait:
+- Goed: de server uit de VS Code-extensie (`…/nabsolutions.nab-al-tools-<versie>/dist/mcp/server.js`, ≥ 1.48) — zet
+  `state="translated"` correct.
+- Fout: npm `nab-al-tools-mcp` 1.43 (geen `initialize`-tool, wel `workspaceFilePath` per tool) — zet géén state.
+  Laat de gebruiker de MCP omzetten (wrapper die de extensie-server start; zie de projectdocs) i.p.v. om te werken.
 
-### Stap 3b — Detecteer bekende vertalingen
+### Stap 6 — Bewijs dat niets omviel
 
-Bouw een mapping van Engelse source → bekende vertalingen op via twee bronnen:
+- Project-script (bijv. `Test-XlfRegression.ps1 -GXlfPath <g.xlf>`): draai het; exit 0 vereist.
+- Anders: `git diff` per taalbestand — alleen `<source>`/`<target>`/NAB-notes van de bedoelde units mogen wijzigen;
+  geen verwijderde units, geen andere targets, geen `state="translated"` die verdwijnt. Plus `RefreshXLF.js --check-only`.
+- Backport naar een release-branch: toets het **merge-resultaat** met die branch, niet de PR-branch zelf
+  (als de release-branch verder ging, geeft een directe vergelijking vals alarm).
+- Bouw de app (of de scratch-kopie) zodat de XLF's in de `.app` meegaan.
 
-**A. Automatisch uit de git diff (voor refactor-commits):**
+### Stap 7 — Rapporteer
 
-Scan de diff van gewijzigde AL-bestanden op vervangen hardcoded strings:
-```bash
-git diff HEAD~1 HEAD -- [gewijzigde .al bestanden]
-```
-Zoek naar patronen waarbij een hardcoded NL string (`- Message('...')`, `- Error('...')`) is vervangen door een Label-aanroep, terwijl het Label zelf een Engelse source krijgt (`+ Label '...'`). Bijvoorbeeld:
-```
--        Message('Naar SCADA planning verzonden');
-+        Message(TextSCADA);
-...
-+        TextSCADA: Label 'Sent to SCADA planning';
-```
-→ mapping: `"Sent to SCADA planning"` → `nl-NL: "Naar SCADA planning verzonden"`, `nl-BE: "Naar SCADA planning verzonden"`
-
-Ondersteunde patronen: `Message(...)`, `Error(...)`, `Confirm(...)`, `StrSubstNo(...)`.
-
-**B. Expliciet via $ARGUMENTS:**
-
-Scan $ARGUMENTS op `"Engelse tekst"=>"NL tekst"` paren. De NL tekst geldt voor zowel nl-NL als nl-BE, tenzij anders opgegeven.
-
-**Prioriteit:** expliciete input overschrijft auto-detectie.
-
-### Stap 4 — Vergelijk met taalbestanden
-
-Voor elk taalbestand (`<AppName>.<lang>.xlf`):
-1. Lees alle bestaande trans-unit IDs
-2. Vergelijk met de master
-3. Identificeer:
-   - **Ontbrekend:** trans-unit ID in master maar niet in taalbestand
-   - **Verouderd:** trans-unit ID in taalbestand maar niet meer in master (optioneel melden)
-
-### Stap 5 — Voeg ontbrekende trans-units toe
-
-Voor elke ontbrekende trans-unit, bepaal eerst of er een bekende vertaling is uit Stap 3b:
-
-**Als de vertaling bekend is voor deze taal** (bijv. nl-NL via auto-detectie of expliciete input):
-```xml
-<trans-unit id="[id uit master]" translate="yes">
-  <source>[source uit master]</source>
-  <target state="translated">[bekende vertaling]</target>
-  <note from="Xliff Generator" annotates="general" priority="3">[note uit master]</note>
-</trans-unit>
-```
-
-**Als de vertaling onbekend is:**
-```xml
-<trans-unit id="[id uit master]" translate="yes">
-  <source>[source uit master]</source>
-  <target state="needs-translation">[source als fallback]</target>
-  <note from="Xliff Generator" annotates="general" priority="3">[note uit master]</note>
-</trans-unit>
-```
-
-**Regels:**
-- Gebruik `state="translated"` + bekende tekst wanneer de vertaling bekend is
-- Gebruik `state="needs-translation"` + Engelse fallback wanneer de vertaling onbekend is
-- Voeg toe binnen de `<group id="body">` sectie, gesorteerd op ID
-- Behoud bestaande vertalingen — overschrijf NOOIT een bestaande target
-
-### Stap 6 — Rapporteer
-
-Toon per taalbestand:
-- Aantal toegevoegde trans-units
-- Lijst van toegevoegde captions (kort)
-- Eventueel verouderde trans-units die niet meer in de master staan
-
-Voorbeeld output:
-```
-Vertalingen bijgewerkt:
-  nl-NL: +3 trans-units vertaald (Customer Name, Order Status, Ship Date)
-  nl-BE: +3 trans-units vertaald
-  fr-FR: +3 trans-units → needs-translation
-  fr-BE: +3 trans-units → needs-translation
-  de-DE: +3 trans-units → needs-translation
-
-Let op: 1 verouderde trans-unit gevonden (Old Field Caption) — handmatig verwijderen indien gewenst.
-```
-
-Vermeld expliciet welke vertalingen automatisch gedetecteerd werden uit de git diff.
+Per taal: aantal units toegevoegd / bron gewijzigd / vertaald, resterende `needs-*`-tellingen van NAB, en de
+uitkomst van de regressiecontrole.
 
 ## Regels
 
-- Overschrijf NOOIT bestaande vertalingen (targets met state="translated" of "final")
-- Voeg ALTIJD toe aan ALLE taalbestanden, niet slechts één
-- Gebruik ALTIJD `state="needs-translation"` voor nieuwe entries
-- Controleer of `"features": ["TranslationFile"]` aan staat
-- Labels met `Locked = true` verschijnen NIET in de XLF — dat is correct, niet melden als ontbrekend
+- Nooit zelf trans-units invoegen of XLF's met regex bewerken — altijd NAB (CLI-refresh + MCP `saveTranslatedTexts`).
+- Nooit een bestaande vertaling overschrijven zonder dat de bron wijzigde, tenzij de gebruiker die hervertaling vraagt.
+- Vertalingen altijd eerst ter akkoord voorleggen.
+- Alle taalbestanden meenemen, niet één.
+- Labels met `Locked = true` staan niet in de XLF — correct, niet melden.
