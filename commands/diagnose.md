@@ -95,6 +95,14 @@ Optionele flags:
 - `-f keep_installed=true` — laat diagnostic app staan na run
 - `-f refresh_cache=true` — ververs symbol cache
 
+### Stap 3b — Productie-approval-gate
+
+Heeft `bc-diagnostic.yaml` een approval-job voor productie-targets (bijv. job `Productie-goedkeuring` die een GitHub-issue `[APPROVAL] ...` aanmaakt), dan start de diagnose op productie pas na menselijke goedkeuring:
+
+- Zoek na de dispatch (`RUN_ID` zoals in Stap 4) het goedkeurings-issue (de run-ID staat in de titel) en meld de URL aan de gebruiker: `gh issue list --state open --search "in:title $RUN_ID"`.
+- Alleen de aangewezen approver geeft vrij, met een comment die **exact** `/approve` is; `/deny` annuleert. Plaats **nooit** zelf `/approve` of `/deny`, ook niet als je `gh`-token als de approver is ingelogd.
+- `gh run watch` wacht door tot de gate besloten is. Mist de gate op de gedispatchte ref terwijl het project er een vereist (zie CLAUDE.md/AGENTS.md): **stop** en dispatch niet naar productie.
+
 ### Stap 4 — Wacht op resultaat
 
 Haal automatisch de run-ID op en wacht:
