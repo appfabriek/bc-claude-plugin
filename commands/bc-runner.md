@@ -116,7 +116,7 @@ Heeft `bc-runner.yaml` een approval-job voor productie-targets (bijv. job `Produ
   ```bash
   gh issue list --state open --search "in:title $RUN_ID"
   ```
-- Alleen de aangewezen approver geeft vrij, met een comment die **exact** `/approve` is; `/deny` annuleert. Plaats **nooit** zelf `/approve` of `/deny` en simuleer geen goedkeuring, ook niet als je `gh`-token als de approver is ingelogd.
+- Alleen de aangewezen approver geeft vrij, met een comment die alleen `approve` (of `/approve`) is; `deny` (of `/deny`) annuleert. Hoofdletters maken niet uit. Plaats **nooit** zelf een approve of deny en simuleer geen goedkeuring, ook niet als je `gh`-token als de approver is ingelogd.
 - `gh run watch` wacht door tot de gate besloten is (timeout volgens de workflow). Een mislukte approval-job betekent: niets uitgevoerd op de server.
 - Maak het script leesbaar voor de approver: roep op productie liever een script uit de repo aan dan een base64-blob.
 
@@ -279,6 +279,6 @@ Write-Host "=== Klaar ==="
 - **Admin/destructief**: vraag expliciete bevestiging — herstel is soms onmogelijk
 - **ForceSync**: alleen op omgevingen die dit expliciet toestaan per CLAUDE.md
 - **Sequentieel**: nooit meerdere runner-jobs parallel triggeren
-- **Productie-gate**: een productie-run wacht op exact `/approve` van de approver (Stap 3b); nooit zelf goedkeuren, en nooit dispatchen vanaf een ref zonder de vereiste gate
+- **Productie-gate**: een productie-run wacht op `approve` (of `/approve`) van de approver (Stap 3b); nooit zelf goedkeuren, en nooit dispatchen vanaf een ref zonder de vereiste gate
 - Gebruik `bc-diagnostic.yaml` (via `/diagnose`) als je AL-code nodig hebt; gebruik `bc-runner.yaml` voor alles wat PowerShell is
 - Sla herbruikbare scripts op in memory als ze succesvol waren
