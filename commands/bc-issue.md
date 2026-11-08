@@ -153,7 +153,7 @@ Als de build faalt:
 /bc-translate
 ```
 
-De skill detecteert automatisch welke trans-units ontbreken en voegt ze toe, inclusief bekende NL-vertalingen uit de git diff.
+De skill synchroniseert de taal-XLF's met NAB (refresh vanuit een verse g.xlf), legt de vertalingen ter akkoord voor (inclusief bekende NL-vertalingen uit de git diff), slaat ze op via de NAB MCP en controleert dat geen bestaande vertaling omviel.
 
 Sla deze stap niet over — ontbrekende vertalingen veroorzaken `needs-translation`-vervuiling in de XLF-bestanden.
 

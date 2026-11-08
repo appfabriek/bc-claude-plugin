@@ -153,7 +153,7 @@ Follow this workflow for ALL BC development work:
 | `/bc-telemetry` | Add telemetry, generate KQL |
 | `/bc-upgrade` | Analyze and generate upgrade codeunits |
 | `/bc-migrate` | BC version migration assistant |
-| `/bc-translate` | Sync XLF translations; auto-detects NL vertalingen uit git diff |
+| `/bc-translate` | Sync XLF translations via NAB (refresh-CLI + MCP), akkoord vooraf, regressiecheck; auto-detects NL vertalingen uit git diff |
 | `/bc-product` | ISV spec, roadmap, changelog |
 | `/bc-ps` | Generate BcContainerHelper scripts |
 | `/bc-finsql` | Import/compile C/SIDE txt objects via bundled KMT finsql script (no hand-rolled finsql) |
